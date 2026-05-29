@@ -188,9 +188,9 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
             </div>
           </fieldset>
 
-          {/* Sección 3: Descripción y escalamiento */}
+          {/* Sección 3: Detalle y escalamiento */}
           <fieldset>
-            <legend className="mb-3 text-sm font-semibold text-gris-700">Descripción y escalamiento</legend>
+            <legend className="mb-3 text-sm font-semibold text-gris-700">Detalle y escalamiento</legend>
             <div className="mb-4">
               <label htmlFor="descripcion_solicitud" className="mb-1 block text-sm font-medium text-gris-700">Descripción de la solicitud</label>
               <textarea id="descripcion_solicitud" rows={3} maxLength={1200} placeholder="Describa la solicitud del estudiante..." className={`w-full resize-none rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:border-aguamarina-500 focus:ring-1 focus:ring-aguamarina-500 ${errors.descripcion_solicitud ? 'border-red-500' : 'border-gris-300'}`} {...register('descripcion_solicitud')} disabled={isSubmitting} />
