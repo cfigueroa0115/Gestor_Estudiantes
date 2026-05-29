@@ -15,8 +15,8 @@ interface ModuleCard {
 
 const modules: ModuleCard[] = [
   {
-    title: 'Gestión salas virtuales',
-    description: 'Gestiona solicitudes estudiantiles del programa',
+    title: 'Radicar solicitud salas virtuales',
+    description: 'Radicar solicitudes de estudiantiles del programa',
     enabled: true,
   },
   {
