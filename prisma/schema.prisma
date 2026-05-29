@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Cargo {
+  Docente
+  Jefe
+  Administrativo
+}
+
+enum Estado {
+  Activo
+  Inactivo
+}
+
+enum Modalidad {
+  Presencial
+  Virtual
+  Funza
+}
+
+enum TipoSolicitud {
+  Academico    @map("Académico")
+  Financiero
+  Certificados
+}
+
+model User {
+  id              String    @id @default(uuid()) @db.Uuid
+  usuario         String    @unique @db.VarChar(20)
+  password_hash   String
+  cargo           Cargo
+  estado          Estado    @default(Activo)
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  disabled_at     DateTime?
+  last_login_at   DateTime?
+  failed_attempts Int       @default(0)
+  locked_until    DateTime?
+  created_by      String?   @db.Uuid
+  updated_by      String?   @db.Uuid
+
+  // Self-referential relations
+  creator         User?     @relation("UserCreator", fields: [created_by], references: [id])
+  updater         User?     @relation("UserUpdater", fields: [updated_by], references: [id])
+  createdUsers    User[]    @relation("UserCreator")
+  updatedUsers    User[]    @relation("UserUpdater")
+
+  // Relation to student requests
+  studentRequests StudentRequest[] @relation("RequestCreator")
+  updatedRequests StudentRequest[] @relation("RequestUpdater")
+
+  @@map("users")
+}
+
+model StudentRequest {
+  id                     String         @id @default(uuid()) @db.Uuid
+  fecha_solicitud        DateTime       @db.Date
+  id_estudiante          String         @db.VarChar(10)
+  nombres                String         @db.VarChar(100)
+  apellidos              String         @db.VarChar(100)
+  correo                 String         @db.VarChar(100)
+  celular                String         @db.VarChar(15)
+  programa               String         @db.VarChar(50)
+  modalidad              Modalidad
+  tipo_solicitud         TipoSolicitud
+  solicitud_academica    String?        @db.VarChar(100)
+  solicitud_financiera   String?        @db.VarChar(100)
+  descripcion_solicitud  String         @db.VarChar(1200)
+  requiere_escalar       Boolean
+  area_escalar           String?        @db.VarChar(50)
+  created_by_user_id     String         @db.Uuid
+  created_at             DateTime       @default(now())
+  updated_at             DateTime       @updatedAt
+  updated_by             String?        @db.Uuid
+
+  // Relations
+  creator                User           @relation("RequestCreator", fields: [created_by_user_id], references: [id], onDelete: Restrict)
+  updater                User?          @relation("RequestUpdater", fields: [updated_by], references: [id])
+
+  @@map("student_requests")
+}

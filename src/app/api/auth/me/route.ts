@@ -1,0 +1,39 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { getSessionFromCookie } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+
+export async function GET(request: NextRequest) {
+  try {
+    const session = await getSessionFromCookie(request.cookies);
+
+    if (!session) {
+      return NextResponse.json(
+        { error: 'No autenticado' },
+        { status: 401 }
+      );
+    }
+
+    // Fetch user from DB to get current estado
+    const user = await prisma.user.findUnique({
+      where: { id: session.id },
+      select: { id: true, usuario: true, cargo: true, estado: true },
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        { error: 'No autenticado' },
+        { status: 401 }
+      );
+    }
+
+    return NextResponse.json(
+      { id: user.id, usuario: user.usuario, cargo: user.cargo, estado: user.estado },
+      { status: 200 }
+    );
+  } catch {
+    return NextResponse.json(
+      { error: 'Ha ocurrido un error interno. Intente nuevamente.' },
+      { status: 500 }
+    );
+  }
+}
