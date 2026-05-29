@@ -65,7 +65,8 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
       });
       if (response.ok) {
         const result = await response.json();
-        reset(); onClose(); onSuccess();
+        reset();
+        setIsSubmitting(false);
         setRadicadoConfirmation(result.numero_radicado);
       } else {
         const result = await response.json();
@@ -92,9 +93,7 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
     if (!value) setValue('area_escalar', null);
   };
 
-  if (!isOpen) return null;
-
-  // Popup de confirmación de radicado
+  // Popup de confirmación de radicado (se muestra independiente del estado isOpen)
   if (radicadoConfirmation) {
     return (
       <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Solicitud radicada">
@@ -112,7 +111,7 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
           </div>
           <p className="text-xs text-gris-500 mb-6">Guarde este número para consultar el estado de su solicitud.</p>
           <button
-            onClick={() => setRadicadoConfirmation(null)}
+            onClick={() => { setRadicadoConfirmation(null); onClose(); onSuccess(); }}
             className="w-full rounded-lg bg-aguamarina-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-aguamarina-700 focus:outline-none focus:ring-2 focus:ring-aguamarina-500 focus:ring-offset-2"
           >
             Entendido
@@ -121,6 +120,8 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
       </div>
     );
   }
+
+  if (!isOpen) return null;
 
   const inputClass = (hasError: boolean) =>
     `w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:border-aguamarina-500 focus:ring-1 focus:ring-aguamarina-500 ${hasError ? 'border-red-500' : 'border-gris-300'}`;
