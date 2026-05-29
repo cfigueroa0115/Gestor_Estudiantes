@@ -12,7 +12,7 @@ export const loginSchema = z.object({
   contrasena: z
     .string()
     .min(1, 'La contraseña es requerida'),
-  cargo: z.enum(['Docente', 'Jefe', 'Administrativo'], {
+  cargo: z.enum(['Profesor', 'Jefe', 'Administrativo'], {
     message: 'Seleccione un cargo válido',
   }),
 });

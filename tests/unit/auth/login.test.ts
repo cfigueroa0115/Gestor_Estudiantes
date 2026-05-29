@@ -33,7 +33,7 @@ async function createMockUser(overrides: Record<string, unknown> = {}) {
     id: 'uuid-123',
     usuario: '1129564302',
     password_hash: await hashPassword('Lifl172023Cf'),
-    cargo: 'Docente',
+    cargo: 'Profesor',
     estado: 'Activo',
     failed_attempts: 0,
     locked_until: null,
@@ -72,7 +72,7 @@ describe('POST /api/auth/login', () => {
       const response = await callLogin({
         usuario: '',
         contrasena: 'password123',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
@@ -84,7 +84,7 @@ describe('POST /api/auth/login', () => {
       const response = await callLogin({
         usuario: 'abc123',
         contrasena: 'password123',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
@@ -114,7 +114,7 @@ describe('POST /api/auth/login', () => {
       const response = await callLogin({
         usuario: '1129564302',
         contrasena: 'Lifl172023Cf',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
@@ -130,7 +130,7 @@ describe('POST /api/auth/login', () => {
       const response = await callLogin({
         usuario: '1129564302',
         contrasena: 'Lifl172023Cf',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
 
       const setCookie = response.headers.get('set-cookie');
@@ -146,7 +146,7 @@ describe('POST /api/auth/login', () => {
       await callLogin({
         usuario: '1129564302',
         contrasena: 'Lifl172023Cf',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
 
       expect(mockUpdate).toHaveBeenCalledWith(
@@ -168,7 +168,7 @@ describe('POST /api/auth/login', () => {
       const response = await callLogin({
         usuario: '9999999999',
         contrasena: 'password123',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
@@ -185,7 +185,7 @@ describe('POST /api/auth/login', () => {
       const response = await callLogin({
         usuario: '1129564302',
         contrasena: 'WrongPassword',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
@@ -195,7 +195,7 @@ describe('POST /api/auth/login', () => {
     });
 
     it('should return generic error when cargo does not match', async () => {
-      const user = await createMockUser({ cargo: 'Docente' });
+      const user = await createMockUser({ cargo: 'Profesor' });
       mockFindUnique.mockResolvedValue(user);
       mockUpdate.mockResolvedValue(user);
 
@@ -219,7 +219,7 @@ describe('POST /api/auth/login', () => {
       const response = await callLogin({
         usuario: '1129564302',
         contrasena: 'Lifl172023Cf',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
@@ -234,7 +234,7 @@ describe('POST /api/auth/login', () => {
       const res1 = await callLogin({
         usuario: '0000000000',
         contrasena: 'pass',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data1 = await res1.json();
 
@@ -245,7 +245,7 @@ describe('POST /api/auth/login', () => {
       const res2 = await callLogin({
         usuario: '1129564302',
         contrasena: 'WrongPass',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data2 = await res2.json();
 
@@ -277,7 +277,7 @@ describe('POST /api/auth/login', () => {
       const response = await callLogin({
         usuario: '1129564302',
         contrasena: 'Lifl172023Cf',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
@@ -298,7 +298,7 @@ describe('POST /api/auth/login', () => {
       const response = await callLogin({
         usuario: '1129564302',
         contrasena: 'Lifl172023Cf',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
@@ -314,7 +314,7 @@ describe('POST /api/auth/login', () => {
       await callLogin({
         usuario: '1129564302',
         contrasena: 'WrongPassword',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
 
       expect(mockUpdate).toHaveBeenCalledWith(
@@ -334,7 +334,7 @@ describe('POST /api/auth/login', () => {
       await callLogin({
         usuario: '1129564302',
         contrasena: 'WrongPassword',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
 
       expect(mockUpdate).toHaveBeenCalledWith(
@@ -355,7 +355,7 @@ describe('POST /api/auth/login', () => {
       await callLogin({
         usuario: '1129564302',
         contrasena: 'WrongPassword',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
 
       expect(mockUpdate).toHaveBeenCalledWith(
@@ -375,7 +375,7 @@ describe('POST /api/auth/login', () => {
       const response = await callLogin({
         usuario: '1129564302',
         contrasena: 'password123',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 

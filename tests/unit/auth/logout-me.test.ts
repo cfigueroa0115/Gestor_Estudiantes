@@ -85,7 +85,7 @@ describe('GET /api/auth/me', () => {
     const token = await signToken({
       id: 'uuid-deleted-user',
       usuario: '1234567890',
-      cargo: 'Docente',
+      cargo: 'Profesor',
     });
     mockFindUnique.mockResolvedValue(null);
 
@@ -100,12 +100,12 @@ describe('GET /api/auth/me', () => {
     const token = await signToken({
       id: 'uuid-123',
       usuario: '1129564302',
-      cargo: 'Docente',
+      cargo: 'Profesor',
     });
     mockFindUnique.mockResolvedValue({
       id: 'uuid-123',
       usuario: '1129564302',
-      cargo: 'Docente',
+      cargo: 'Profesor',
       estado: 'Activo',
     });
 
@@ -115,7 +115,7 @@ describe('GET /api/auth/me', () => {
     expect(response.status).toBe(200);
     expect(data.id).toBe('uuid-123');
     expect(data.usuario).toBe('1129564302');
-    expect(data.cargo).toBe('Docente');
+    expect(data.cargo).toBe('Profesor');
     expect(data.estado).toBe('Activo');
   });
 
@@ -124,12 +124,12 @@ describe('GET /api/auth/me', () => {
     const token = await signToken({
       id: 'uuid-123',
       usuario: '1129564302',
-      cargo: 'Docente',
+      cargo: 'Profesor',
     });
     mockFindUnique.mockResolvedValue({
       id: 'uuid-123',
       usuario: '1129564302',
-      cargo: 'Docente',
+      cargo: 'Profesor',
       estado: 'Inactivo',
     });
 
@@ -144,7 +144,7 @@ describe('GET /api/auth/me', () => {
     const token = await signToken({
       id: 'uuid-123',
       usuario: '1129564302',
-      cargo: 'Docente',
+      cargo: 'Profesor',
     });
     mockFindUnique.mockRejectedValue(new Error('DB connection failed'));
 

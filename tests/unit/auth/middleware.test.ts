@@ -9,7 +9,7 @@ function getSecret(): Uint8Array {
   return new TextEncoder().encode(TEST_SECRET);
 }
 
-async function createValidToken(cargo: string = 'Docente'): Promise<string> {
+async function createValidToken(cargo: string = 'Profesor'): Promise<string> {
   return new SignJWT({ id: 'user-123', usuario: '1129564302', cargo })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -18,7 +18,7 @@ async function createValidToken(cargo: string = 'Docente'): Promise<string> {
 }
 
 async function createExpiredToken(): Promise<string> {
-  return new SignJWT({ id: 'user-123', usuario: '1129564302', cargo: 'Docente' })
+  return new SignJWT({ id: 'user-123', usuario: '1129564302', cargo: 'Profesor' })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt(Math.floor(Date.now() / 1000) - 60000)
     .setExpirationTime(Math.floor(Date.now() / 1000) - 30000)
@@ -166,7 +166,7 @@ describe('Middleware - Valid Token (ROLE_RESTRICTIONS_ENABLED=false)', () => {
   });
 
   it('should allow all cargos when restrictions are disabled', async () => {
-    for (const cargo of ['Docente', 'Jefe', 'Administrativo']) {
+    for (const cargo of ['Profesor', 'Jefe', 'Administrativo']) {
       const token = await createValidToken(cargo);
       const request = createRequest('/dashboard/users', token);
       const response = await middleware(request);
@@ -187,7 +187,7 @@ describe('Middleware - Role Restrictions (ROLE_RESTRICTIONS_ENABLED=true)', () =
 
   it('should allow access when cargo is in permitted list', async () => {
     // All cargos are currently permitted for all routes
-    const token = await createValidToken('Docente');
+    const token = await createValidToken('Profesor');
     const request = createRequest('/dashboard', token);
     const response = await middleware(request);
 
@@ -195,7 +195,7 @@ describe('Middleware - Role Restrictions (ROLE_RESTRICTIONS_ENABLED=true)', () =
   });
 
   it('should allow all current cargos since all are permitted', async () => {
-    for (const cargo of ['Docente', 'Jefe', 'Administrativo']) {
+    for (const cargo of ['Profesor', 'Jefe', 'Administrativo']) {
       const token = await createValidToken(cargo);
       const request = createRequest('/api/users', token);
       const response = await middleware(request);

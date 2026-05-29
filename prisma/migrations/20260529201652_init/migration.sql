@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Cargo" AS ENUM ('Docente', 'Jefe', 'Administrativo');
+CREATE TYPE "Cargo" AS ENUM ('Profesor', 'Jefe', 'Administrativo');
 
 -- CreateEnum
 CREATE TYPE "Estado" AS ENUM ('Activo', 'Inactivo');

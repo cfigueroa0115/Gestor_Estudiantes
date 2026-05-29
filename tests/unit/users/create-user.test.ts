@@ -62,7 +62,7 @@ describe('POST /api/users', () => {
       const response = await callCreateUser({
         usuario: '12345',
         password: 'password123',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
@@ -76,7 +76,7 @@ describe('POST /api/users', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
     });
 
@@ -93,7 +93,7 @@ describe('POST /api/users', () => {
       const response = await callCreateUser({
         usuario: '1234',
         password: 'password123',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
@@ -105,7 +105,7 @@ describe('POST /api/users', () => {
       const response = await callCreateUser({
         usuario: '123456789012345678901',
         password: 'password123',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
@@ -117,7 +117,7 @@ describe('POST /api/users', () => {
       const response = await callCreateUser({
         usuario: 'abc12345',
         password: 'password123',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
@@ -129,7 +129,7 @@ describe('POST /api/users', () => {
       const response = await callCreateUser({
         usuario: '12345678',
         password: 'short',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
@@ -155,7 +155,7 @@ describe('POST /api/users', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
     });
 
@@ -168,7 +168,7 @@ describe('POST /api/users', () => {
       const response = await callCreateUser({
         usuario: '12345678',
         password: 'password123',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
@@ -182,7 +182,7 @@ describe('POST /api/users', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       mockFindUnique.mockResolvedValue(null);
       mockHashPassword.mockResolvedValue('$2a$12$hashedpassword');
@@ -193,7 +193,7 @@ describe('POST /api/users', () => {
         id: 'new-user-uuid',
         usuario: '12345678',
         password_hash: '$2a$12$hashedpassword',
-        cargo: 'Docente',
+        cargo: 'Profesor',
         estado: 'Activo',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -209,14 +209,14 @@ describe('POST /api/users', () => {
       const response = await callCreateUser({
         usuario: '12345678',
         password: 'password123',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
       expect(response.status).toBe(201);
       expect(data.id).toBe('new-user-uuid');
       expect(data.usuario).toBe('12345678');
-      expect(data.cargo).toBe('Docente');
+      expect(data.cargo).toBe('Profesor');
       expect(data.estado).toBe('Activo');
       expect(data.created_by).toBe('auth-user-uuid');
     });
@@ -226,7 +226,7 @@ describe('POST /api/users', () => {
         id: 'new-user-uuid',
         usuario: '12345678',
         password_hash: '$2a$12$hashedpassword',
-        cargo: 'Docente',
+        cargo: 'Profesor',
         estado: 'Activo',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -242,7 +242,7 @@ describe('POST /api/users', () => {
       const response = await callCreateUser({
         usuario: '12345678',
         password: 'password123',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 
@@ -317,7 +317,7 @@ describe('POST /api/users', () => {
         id: 'new-user-uuid',
         usuario: '12345678',
         password_hash: '$2a$12$hashedpassword',
-        cargo: 'Docente',
+        cargo: 'Profesor',
         estado: 'Activo',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -333,7 +333,7 @@ describe('POST /api/users', () => {
       await callCreateUser({
         usuario: '12345678',
         password: 'password123',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
 
       expect(mockCreate).toHaveBeenCalledWith({
@@ -349,7 +349,7 @@ describe('POST /api/users', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
     });
 
@@ -359,7 +359,7 @@ describe('POST /api/users', () => {
       const response = await callCreateUser({
         usuario: '12345678',
         password: 'password123',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       const data = await response.json();
 

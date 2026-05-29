@@ -56,7 +56,7 @@ export function UserFilters({
         aria-label="Filtrar por cargo"
       >
         <option value="">Todos los cargos</option>
-        <option value="Docente">Docente</option>
+        <option value="Profesor">Profesor</option>
         <option value="Jefe">Jefe</option>
         <option value="Administrativo">Administrativo</option>
       </select>

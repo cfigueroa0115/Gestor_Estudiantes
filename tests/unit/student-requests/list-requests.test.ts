@@ -61,7 +61,7 @@ const sampleRequests = [
     created_at: new Date('2024-06-15T10:00:00Z'),
     updated_at: new Date('2024-06-15T10:00:00Z'),
     updated_by: null,
-    creator: { usuario: '1129564302', cargo: 'Docente' },
+    creator: { usuario: '1129564302', cargo: 'Profesor' },
   },
 ];
 
@@ -95,7 +95,7 @@ describe('GET /api/student-requests', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
     });
 
@@ -179,7 +179,7 @@ describe('GET /api/student-requests', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       mockCount.mockResolvedValue(0);
       mockFindMany.mockResolvedValue([]);
@@ -310,7 +310,7 @@ describe('GET /api/student-requests', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       mockCount.mockResolvedValue(0);
       mockFindMany.mockResolvedValue([]);
@@ -362,7 +362,7 @@ describe('GET /api/student-requests', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       mockCount.mockResolvedValue(1);
       mockFindMany.mockResolvedValue(sampleRequests);
@@ -374,7 +374,7 @@ describe('GET /api/student-requests', () => {
 
       expect(data.data[0].creator).toEqual({
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
     });
 
@@ -401,7 +401,7 @@ describe('GET /api/student-requests', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
     });
 
@@ -439,7 +439,7 @@ describe('GET /api/student-requests', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
     });
 

@@ -13,7 +13,7 @@ export const createUserSchema = z.object({
   password: z
     .string()
     .min(8, 'La contraseña debe tener al menos 8 caracteres'),
-  cargo: z.enum(['Docente', 'Jefe', 'Administrativo'], {
+  cargo: z.enum(['Profesor', 'Jefe', 'Administrativo'], {
     message: 'Seleccione un cargo válido',
   }),
   estado: z
@@ -32,7 +32,7 @@ export type CreateUserInput = z.infer<typeof createUserSchema>;
  */
 export const updateUserSchema = z.object({
   cargo: z
-    .enum(['Docente', 'Jefe', 'Administrativo'], {
+    .enum(['Profesor', 'Jefe', 'Administrativo'], {
       message: 'Seleccione un cargo válido',
     })
     .optional(),

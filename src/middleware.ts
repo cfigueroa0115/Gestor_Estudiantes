@@ -21,11 +21,11 @@ interface RoutePermission {
  * will be used to restrict access based on the user's cargo.
  */
 const ROUTE_PERMISSIONS: RoutePermission[] = [
-  { path: '/dashboard', allowedCargos: ['Docente', 'Jefe', 'Administrativo'] },
-  { path: '/dashboard/users', allowedCargos: ['Docente', 'Jefe', 'Administrativo'] },
-  { path: '/dashboard/requests', allowedCargos: ['Docente', 'Jefe', 'Administrativo'] },
-  { path: '/api/users', allowedCargos: ['Docente', 'Jefe', 'Administrativo'] },
-  { path: '/api/student-requests', allowedCargos: ['Docente', 'Jefe', 'Administrativo'] },
+  { path: '/dashboard', allowedCargos: ['Profesor', 'Jefe', 'Administrativo'] },
+  { path: '/dashboard/users', allowedCargos: ['Profesor', 'Jefe', 'Administrativo'] },
+  { path: '/dashboard/requests', allowedCargos: ['Profesor', 'Jefe', 'Administrativo'] },
+  { path: '/api/users', allowedCargos: ['Profesor', 'Jefe', 'Administrativo'] },
+  { path: '/api/student-requests', allowedCargos: ['Profesor', 'Jefe', 'Administrativo'] },
 ];
 
 // --- Helper Functions ---

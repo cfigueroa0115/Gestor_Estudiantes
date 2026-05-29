@@ -86,7 +86,7 @@ describe('POST /api/student-requests', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
     });
 
@@ -186,7 +186,7 @@ describe('POST /api/student-requests', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
     });
 
@@ -275,7 +275,7 @@ describe('POST /api/student-requests', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
     });
 

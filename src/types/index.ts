@@ -1,5 +1,5 @@
 // Enums (mirror Prisma enums for frontend use)
-export type Cargo = 'Docente' | 'Jefe' | 'Administrativo';
+export type Cargo = 'Profesor' | 'Jefe' | 'Administrativo';
 export type Estado = 'Activo' | 'Inactivo';
 export type Modalidad = 'Presencial' | 'Virtual' | 'Funza';
 export type TipoSolicitud = 'Académico' | 'Financiero' | 'Certificados';

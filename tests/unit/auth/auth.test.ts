@@ -22,7 +22,7 @@ afterAll(() => {
 
 describe('signToken', () => {
   it('should create a valid JWT string', async () => {
-    const payload = { id: '123', usuario: '1129564302', cargo: 'Docente' as const };
+    const payload = { id: '123', usuario: '1129564302', cargo: 'Profesor' as const };
     const token = await signToken(payload);
 
     expect(token).toBeDefined();
@@ -56,14 +56,14 @@ describe('signToken', () => {
 
 describe('verifyToken', () => {
   it('should return payload for a valid token', async () => {
-    const payload = { id: '123', usuario: '1129564302', cargo: 'Docente' as const };
+    const payload = { id: '123', usuario: '1129564302', cargo: 'Profesor' as const };
     const token = await signToken(payload);
     const result = await verifyToken(token);
 
     expect(result).not.toBeNull();
     expect(result!.id).toBe('123');
     expect(result!.usuario).toBe('1129564302');
-    expect(result!.cargo).toBe('Docente');
+    expect(result!.cargo).toBe('Profesor');
   });
 
   it('should return null for an invalid token', async () => {
@@ -77,7 +77,7 @@ describe('verifyToken', () => {
   });
 
   it('should return null for a tampered token', async () => {
-    const payload = { id: '123', usuario: '1129564302', cargo: 'Docente' as const };
+    const payload = { id: '123', usuario: '1129564302', cargo: 'Profesor' as const };
     const token = await signToken(payload);
     // Tamper with the token
     const tampered = token.slice(0, -5) + 'XXXXX';
@@ -175,7 +175,7 @@ describe('clearSessionCookie', () => {
 
 describe('getSessionFromCookie', () => {
   it('should return payload when valid session cookie exists', async () => {
-    const payload = { id: '123', usuario: '1129564302', cargo: 'Docente' as const };
+    const payload = { id: '123', usuario: '1129564302', cargo: 'Profesor' as const };
     const token = await signToken(payload);
 
     const mockCookies = {
@@ -189,7 +189,7 @@ describe('getSessionFromCookie', () => {
     expect(result).not.toBeNull();
     expect(result!.id).toBe('123');
     expect(result!.usuario).toBe('1129564302');
-    expect(result!.cargo).toBe('Docente');
+    expect(result!.cargo).toBe('Profesor');
   });
 
   it('should return null when no session cookie exists', async () => {

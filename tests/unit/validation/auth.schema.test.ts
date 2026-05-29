@@ -6,13 +6,13 @@ describe('loginSchema', () => {
     const result = loginSchema.safeParse({
       usuario: '1129564302',
       contrasena: 'password123',
-      cargo: 'Docente',
+      cargo: 'Profesor',
     });
     expect(result.success).toBe(true);
   });
 
   it('accepts all valid cargo values', () => {
-    for (const cargo of ['Docente', 'Jefe', 'Administrativo']) {
+    for (const cargo of ['Profesor', 'Jefe', 'Administrativo']) {
       const result = loginSchema.safeParse({
         usuario: '12345',
         contrasena: 'pass',
@@ -26,7 +26,7 @@ describe('loginSchema', () => {
     const result = loginSchema.safeParse({
       usuario: 'abc123',
       contrasena: 'password',
-      cargo: 'Docente',
+      cargo: 'Profesor',
     });
     expect(result.success).toBe(false);
   });
@@ -35,7 +35,7 @@ describe('loginSchema', () => {
     const result = loginSchema.safeParse({
       usuario: '',
       contrasena: 'password',
-      cargo: 'Docente',
+      cargo: 'Profesor',
     });
     expect(result.success).toBe(false);
   });
@@ -44,7 +44,7 @@ describe('loginSchema', () => {
     const result = loginSchema.safeParse({
       usuario: '12345',
       contrasena: '',
-      cargo: 'Docente',
+      cargo: 'Profesor',
     });
     expect(result.success).toBe(false);
   });

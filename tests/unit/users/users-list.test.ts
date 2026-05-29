@@ -56,7 +56,7 @@ function createMockUsers(count: number) {
   return Array.from({ length: count }, (_, i) => ({
     id: `uuid-${i}`,
     usuario: `${1000000000 + i}`,
-    cargo: i % 3 === 0 ? 'Docente' : i % 3 === 1 ? 'Jefe' : 'Administrativo',
+    cargo: i % 3 === 0 ? 'Profesor' : i % 3 === 1 ? 'Jefe' : 'Administrativo',
     estado: i % 2 === 0 ? 'Activo' : 'Inactivo',
     created_at: new Date(`2024-01-${String(i + 1).padStart(2, '0')}`),
     updated_at: new Date(`2024-01-${String(i + 1).padStart(2, '0')}`),
@@ -94,7 +94,7 @@ describe('GET /api/users', () => {
 
   describe('Pagination', () => {
     it('should return paginated response with default page=1 and pageSize=10', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       const users = createMockUsers(10);
       mockCount.mockResolvedValue(25);
       mockFindMany.mockResolvedValue(users);
@@ -111,7 +111,7 @@ describe('GET /api/users', () => {
     });
 
     it('should accept valid pageSize values (10, 25, 50)', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockResolvedValue(100);
       mockFindMany.mockResolvedValue(createMockUsers(25));
 
@@ -123,7 +123,7 @@ describe('GET /api/users', () => {
     });
 
     it('should default to pageSize=10 for invalid pageSize values', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockResolvedValue(30);
       mockFindMany.mockResolvedValue(createMockUsers(10));
 
@@ -134,7 +134,7 @@ describe('GET /api/users', () => {
     });
 
     it('should default to pageSize=10 for non-numeric pageSize', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockResolvedValue(30);
       mockFindMany.mockResolvedValue(createMockUsers(10));
 
@@ -145,7 +145,7 @@ describe('GET /api/users', () => {
     });
 
     it('should handle page parameter correctly', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockResolvedValue(30);
       mockFindMany.mockResolvedValue(createMockUsers(10));
 
@@ -162,7 +162,7 @@ describe('GET /api/users', () => {
     });
 
     it('should default page to 1 for invalid page values', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockResolvedValue(10);
       mockFindMany.mockResolvedValue(createMockUsers(10));
 
@@ -173,7 +173,7 @@ describe('GET /api/users', () => {
     });
 
     it('should calculate totalPages correctly', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockResolvedValue(51);
       mockFindMany.mockResolvedValue(createMockUsers(10));
 
@@ -186,7 +186,7 @@ describe('GET /api/users', () => {
 
   describe('Filters', () => {
     it('should filter by usuario with partial match (contains)', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockResolvedValue(1);
       mockFindMany.mockResolvedValue([createMockUsers(1)[0]]);
 
@@ -202,23 +202,23 @@ describe('GET /api/users', () => {
     });
 
     it('should filter by cargo with exact match', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockResolvedValue(5);
       mockFindMany.mockResolvedValue(createMockUsers(5));
 
-      await callGetUsers({ cargo: 'Docente' });
+      await callGetUsers({ cargo: 'Profesor' });
 
       expect(mockFindMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: expect.objectContaining({
-            cargo: 'Docente',
+            cargo: 'Profesor',
           }),
         })
       );
     });
 
     it('should filter by estado with exact match', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockResolvedValue(3);
       mockFindMany.mockResolvedValue(createMockUsers(3));
 
@@ -234,17 +234,17 @@ describe('GET /api/users', () => {
     });
 
     it('should combine multiple filters with AND logic', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockResolvedValue(2);
       mockFindMany.mockResolvedValue(createMockUsers(2));
 
-      await callGetUsers({ usuario: '112', cargo: 'Docente', estado: 'Activo' });
+      await callGetUsers({ usuario: '112', cargo: 'Profesor', estado: 'Activo' });
 
       expect(mockFindMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: {
             usuario: { contains: '112', mode: 'insensitive' },
-            cargo: 'Docente',
+            cargo: 'Profesor',
             estado: 'Activo',
           },
         })
@@ -252,7 +252,7 @@ describe('GET /api/users', () => {
     });
 
     it('should ignore invalid cargo values', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockResolvedValue(10);
       mockFindMany.mockResolvedValue(createMockUsers(10));
 
@@ -266,7 +266,7 @@ describe('GET /api/users', () => {
     });
 
     it('should ignore invalid estado values', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockResolvedValue(10);
       mockFindMany.mockResolvedValue(createMockUsers(10));
 
@@ -282,12 +282,12 @@ describe('GET /api/users', () => {
 
   describe('Response format', () => {
     it('should not include password_hash in response', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockResolvedValue(1);
       mockFindMany.mockResolvedValue([{
         id: 'uuid-1',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
         estado: 'Activo',
         created_at: new Date(),
         updated_at: new Date(),
@@ -304,7 +304,7 @@ describe('GET /api/users', () => {
     });
 
     it('should use Prisma select to exclude password_hash', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockResolvedValue(1);
       mockFindMany.mockResolvedValue([createMockUsers(1)[0]]);
 
@@ -331,7 +331,7 @@ describe('GET /api/users', () => {
     });
 
     it('should return empty data array when no users match', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockResolvedValue(0);
       mockFindMany.mockResolvedValue([]);
 
@@ -347,7 +347,7 @@ describe('GET /api/users', () => {
 
   describe('Error handling', () => {
     it('should return 500 with generic error on unexpected exceptions', async () => {
-      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Docente' });
+      mockGetSessionFromCookie.mockResolvedValue({ id: 'user-1', usuario: '1129564302', cargo: 'Profesor' });
       mockCount.mockRejectedValue(new Error('DB connection failed'));
 
       const response = await callGetUsers();

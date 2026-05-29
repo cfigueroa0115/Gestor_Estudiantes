@@ -35,7 +35,7 @@ export function EditUserModal({
   } = useForm<UpdateUserFormData>({
     resolver: zodResolver(updateUserSchema),
     values: {
-      cargo: user?.cargo || 'Docente',
+      cargo: user?.cargo || 'Profesor',
       password: '',
     },
   });
@@ -108,7 +108,7 @@ export function EditUserModal({
               {...register('cargo')}
               className="w-full rounded-lg border border-gris-300 bg-white px-3 py-2 text-sm text-gris-900 focus:border-aguamarina-500 focus:outline-none focus:ring-2 focus:ring-aguamarina-500/20"
             >
-              <option value="Docente">Docente</option>
+              <option value="Profesor">Profesor</option>
               <option value="Jefe">Jefe</option>
               <option value="Administrativo">Administrativo</option>
             </select>

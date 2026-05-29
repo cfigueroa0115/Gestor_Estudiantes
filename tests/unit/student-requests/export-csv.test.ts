@@ -22,7 +22,7 @@ import { GET } from '@/app/api/student-requests/export/route';
 const mockSession = {
   id: 'user-uuid-123',
   usuario: '1129564302',
-  cargo: 'Docente' as const,
+  cargo: 'Profesor' as const,
   iat: Math.floor(Date.now() / 1000),
   exp: Math.floor(Date.now() / 1000) + 28800,
 };
@@ -49,7 +49,7 @@ const mockRecord = {
   updated_by: null,
   creator: {
     usuario: '1129564302',
-    cargo: 'Docente',
+    cargo: 'Profesor',
   },
 };
 
@@ -185,7 +185,7 @@ describe('GET /api/student-requests/export', () => {
     const dataRow = lines[1];
 
     expect(dataRow).toContain('1129564302');
-    expect(dataRow).toContain('Docente');
+    expect(dataRow).toContain('Profesor');
   });
 
   it('should output empty string for null fields', async () => {

@@ -7,7 +7,7 @@ datasource db {
 }
 
 enum Cargo {
-  Docente
+  Profesor
   Jefe
   Administrativo
 }

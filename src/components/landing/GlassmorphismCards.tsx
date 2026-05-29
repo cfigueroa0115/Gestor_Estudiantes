@@ -32,7 +32,7 @@ const cards: CardData[] = [
   {
     title: "Administración de Usuarios",
     description:
-      "Gestiona docentes, jefes y administrativos con control de acceso seguro.",
+      "Gestiona profesores, jefes y administrativos con control de acceso seguro.",
     icon: (
       <svg
         className="h-8 w-8"

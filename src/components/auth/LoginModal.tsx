@@ -187,7 +187,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
               <option value="" disabled>
                 Seleccione su cargo
               </option>
-              <option value="Docente">Docente</option>
+              <option value="Profesor">Profesor</option>
               <option value="Jefe">Jefe</option>
               <option value="Administrativo">Administrativo</option>
             </select>

@@ -70,7 +70,7 @@ describe('PATCH /api/users/[id]/status', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
     });
 
@@ -97,7 +97,7 @@ describe('PATCH /api/users/[id]/status', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
     });
 
@@ -117,7 +117,7 @@ describe('PATCH /api/users/[id]/status', () => {
       id: 'target-user-uuid',
       usuario: '12345678',
       password_hash: '$2a$12$existinghash',
-      cargo: 'Docente',
+      cargo: 'Profesor',
       estado: 'Activo',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -133,7 +133,7 @@ describe('PATCH /api/users/[id]/status', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       mockFindUnique.mockResolvedValue(existingUser);
     });
@@ -188,7 +188,7 @@ describe('PATCH /api/users/[id]/status', () => {
       id: 'target-user-uuid',
       usuario: '12345678',
       password_hash: '$2a$12$existinghash',
-      cargo: 'Docente',
+      cargo: 'Profesor',
       estado: 'Inactivo',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -204,7 +204,7 @@ describe('PATCH /api/users/[id]/status', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       mockFindUnique.mockResolvedValue(inactiveUser);
     });
@@ -243,7 +243,7 @@ describe('PATCH /api/users/[id]/status', () => {
       mockGetSessionFromCookie.mockResolvedValue({
         id: 'auth-user-uuid',
         usuario: '1129564302',
-        cargo: 'Docente',
+        cargo: 'Profesor',
       });
       mockFindUnique.mockResolvedValue({ id: 'target-user-uuid' });
     });

@@ -20,7 +20,7 @@ async function main() {
       data: {
         usuario: "1129564302",
         password_hash: passwordHash,
-        cargo: "Docente",
+        cargo: "Profesor",
         estado: "Activo",
         created_by: null,
       },

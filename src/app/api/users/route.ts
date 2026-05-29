@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
       };
     }
 
-    if (cargo && ['Docente', 'Jefe', 'Administrativo'].includes(cargo)) {
+    if (cargo && ['Profesor', 'Jefe', 'Administrativo'].includes(cargo)) {
       where.cargo = cargo;
     }
 

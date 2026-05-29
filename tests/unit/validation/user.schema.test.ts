@@ -6,7 +6,7 @@ describe('createUserSchema', () => {
     const result = createUserSchema.safeParse({
       usuario: '12345678',
       password: 'securepass',
-      cargo: 'Docente',
+      cargo: 'Profesor',
     });
     expect(result.success).toBe(true);
     if (result.success) {
@@ -31,7 +31,7 @@ describe('createUserSchema', () => {
     const result = createUserSchema.safeParse({
       usuario: '1234',
       password: 'securepass',
-      cargo: 'Docente',
+      cargo: 'Profesor',
     });
     expect(result.success).toBe(false);
   });
@@ -40,7 +40,7 @@ describe('createUserSchema', () => {
     const result = createUserSchema.safeParse({
       usuario: '123456789012345678901',
       password: 'securepass',
-      cargo: 'Docente',
+      cargo: 'Profesor',
     });
     expect(result.success).toBe(false);
   });
@@ -49,7 +49,7 @@ describe('createUserSchema', () => {
     const result = createUserSchema.safeParse({
       usuario: 'abcde',
       password: 'securepass',
-      cargo: 'Docente',
+      cargo: 'Profesor',
     });
     expect(result.success).toBe(false);
   });
@@ -58,7 +58,7 @@ describe('createUserSchema', () => {
     const result = createUserSchema.safeParse({
       usuario: '12345678',
       password: 'short',
-      cargo: 'Docente',
+      cargo: 'Profesor',
     });
     expect(result.success).toBe(false);
   });
@@ -76,7 +76,7 @@ describe('createUserSchema', () => {
     const result = createUserSchema.safeParse({
       usuario: '12345678',
       password: 'securepass',
-      cargo: 'Docente',
+      cargo: 'Profesor',
       estado: 'Suspendido',
     });
     expect(result.success).toBe(false);
