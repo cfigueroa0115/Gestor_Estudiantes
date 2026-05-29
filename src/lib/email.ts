@@ -2,9 +2,9 @@ import { Resend } from 'resend';
 import { ESCALATION_EMAIL_CONFIG } from './email-config';
 
 /**
- * Send an escalation email when a student request is escalated.
- * Uses Resend API for reliable email delivery from serverless environments.
- * Required env var: RESEND_API_KEY
+ * Send escalation emails to all configured recipients for the given area.
+ * Each recipient gets their own email sent via their own Resend API key.
+ * This approach works without domain verification in Resend.
  */
 export async function sendEscalationEmail(params: {
   area: string;
@@ -16,12 +16,6 @@ export async function sendEscalationEmail(params: {
 }): Promise<boolean> {
   const { area, studentName, studentId, requestDescription, numeroRadicado } = params;
 
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    console.error('[Email] Servicio de correo no configurado. Falta RESEND_API_KEY.');
-    return false;
-  }
-
   const emailConfig = ESCALATION_EMAIL_CONFIG.find(
     (config) => config.area.toLowerCase() === area.toLowerCase()
   );
@@ -32,7 +26,6 @@ export async function sendEscalationEmail(params: {
 
   const now = new Date();
   const fecha = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-
   const fromAddress = process.env.EMAIL_FROM || 'Portal Gestion Estudiantes UCC <onboarding@resend.dev>';
 
   const htmlBody = [
@@ -58,45 +51,38 @@ export async function sendEscalationEmail(params: {
     '</p></div></div></body></html>',
   ].join('');
 
-  try {
-    const resend = new Resend(apiKey);
-    const recipients = [emailConfig.to];
-    const ccList = emailConfig.cc.length > 0 ? emailConfig.cc : undefined;
+  const subject = `[Escalamiento] Radicado ${numeroRadicado} - Area ${area} - ${studentName}`;
+  let allSent = true;
 
-    // Intentar enviar con CC
-    const { error } = await resend.emails.send({
-      from: fromAddress,
-      to: recipients,
-      cc: ccList,
-      subject: `[Escalamiento] Radicado ${numeroRadicado} - Area ${area} - ${studentName}`,
-      html: htmlBody,
-    });
-
-    if (error) {
-      // Si falla con CC, reintentar sin CC
-      if (ccList && ccList.length > 0) {
-        console.warn('[Email] Fallo con CC, reintentando sin CC:', error.message);
-        const { error: retryError } = await resend.emails.send({
-          from: fromAddress,
-          to: recipients,
-          subject: `[Escalamiento] Radicado ${numeroRadicado} - Area ${area} - ${studentName}`,
-          html: htmlBody,
-        });
-        if (retryError) {
-          console.error('[Email] Error en reintento sin CC:', retryError.message);
-          return false;
-        }
-        console.log(`[Email] Correo enviado sin CC. Radicado: ${numeroRadicado}, To: ${emailConfig.to}`);
-        return true;
-      }
-      console.error('[Email] Error de Resend:', error.message);
-      return false;
+  // Send to each recipient using their own API key
+  for (const recipient of emailConfig.recipients) {
+    const apiKey = process.env[recipient.apiKeyEnvVar];
+    if (!apiKey) {
+      console.error(`[Email] Falta variable ${recipient.apiKeyEnvVar} para ${recipient.email}`);
+      allSent = false;
+      continue;
     }
 
-    console.log(`[Email] Correo enviado. Radicado: ${numeroRadicado}, Area: ${area}, To: ${emailConfig.to}, CC: ${emailConfig.cc.join(', ')}`);
-    return true;
-  } catch (error) {
-    console.error('[Email] Error al enviar:', error instanceof Error ? error.message : error);
-    return false;
+    try {
+      const resend = new Resend(apiKey);
+      const { error } = await resend.emails.send({
+        from: fromAddress,
+        to: [recipient.email],
+        subject,
+        html: htmlBody,
+      });
+
+      if (error) {
+        console.error(`[Email] Error enviando a ${recipient.email}:`, error.message);
+        allSent = false;
+      } else {
+        console.log(`[Email] Enviado a ${recipient.email}. Radicado: ${numeroRadicado}`);
+      }
+    } catch (err) {
+      console.error(`[Email] Error enviando a ${recipient.email}:`, err instanceof Error ? err.message : err);
+      allSent = false;
+    }
   }
+
+  return allSent;
 }
