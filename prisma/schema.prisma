@@ -84,6 +84,7 @@ model StudentRequest {
   estado_solicitud       EstadoSolicitud @default(Radicada)
   estado_solicitud_fecha DateTime       @default(now())
   observaciones          String?        @db.VarChar(1200)
+  gestion_count          Int            @default(0)
   created_by_user_id     String         @db.Uuid
   created_at             DateTime       @default(now())
   updated_at             DateTime       @updatedAt

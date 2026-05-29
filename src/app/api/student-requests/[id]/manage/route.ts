@@ -68,13 +68,14 @@ export async function PATCH(
       );
     }
 
-    // 4. Update the record
+    // 4. Update the record and increment gestion_count
     const updated = await prisma.studentRequest.update({
       where: { id },
       data: {
         estado_solicitud: VALID_ESTADOS[estado_solicitud],
         estado_solicitud_fecha: new Date(),
         observaciones: observaciones.trim(),
+        gestion_count: (existing.gestion_count || 0) + 1,
         updated_by: session.id,
       },
     });

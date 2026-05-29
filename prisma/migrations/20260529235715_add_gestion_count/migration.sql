@@ -53,6 +53,7 @@ CREATE TABLE "student_requests" (
     "estado_solicitud" "EstadoSolicitud" NOT NULL DEFAULT 'Radicada',
     "estado_solicitud_fecha" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "observaciones" VARCHAR(1200),
+    "gestion_count" INTEGER NOT NULL DEFAULT 0,
     "created_by_user_id" UUID NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,

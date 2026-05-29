@@ -28,6 +28,7 @@ interface StudentRequestRecord {
   requiere_escalar: boolean;
   area_escalar: string | null;
   estado_solicitud: string;
+  gestion_count: number;
   created_at: string;
   creator: {
     usuario: string;
@@ -348,9 +349,21 @@ export default function ManageRequestsPage() {
                         {col.key === 'accion' ? (
                           <button
                             onClick={() => handleManageClick(request)}
-                            className="inline-flex items-center rounded-md bg-verde-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-verde-700 focus:outline-none focus:ring-2 focus:ring-verde-500 focus:ring-offset-1"
+                            className={`inline-flex items-center rounded-md px-3 py-1.5 text-xs font-medium text-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 ${
+                              request.gestion_count === 0
+                                ? 'bg-verde-600 hover:bg-verde-700 focus:ring-verde-500'
+                                : request.gestion_count === 1
+                                ? 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500'
+                                : request.gestion_count === 2
+                                ? 'bg-orange-500 hover:bg-orange-600 focus:ring-orange-500'
+                                : request.gestion_count === 3
+                                ? 'bg-purple-600 hover:bg-purple-700 focus:ring-purple-500'
+                                : 'bg-red-600 hover:bg-red-700 focus:ring-red-500'
+                            }`}
                           >
-                            Gestionar
+                            {request.gestion_count === 0
+                              ? 'Gestionar'
+                              : `Gesti\u00f3n ${request.gestion_count + 1}`}
                           </button>
                         ) : col.key === 'descripcion_solicitud' ? (
                           <span className="block max-w-[200px] truncate">
