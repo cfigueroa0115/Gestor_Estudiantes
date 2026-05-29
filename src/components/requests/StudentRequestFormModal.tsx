@@ -63,8 +63,9 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
       });
       if (response.ok) {
+        const result = await response.json();
         reset(); onClose(); onSuccess();
-        showToast('Solicitud registrada exitosamente', 'success');
+        showToast(`Solicitud radicada exitosamente. N° Radicado: ${result.numero_radicado}`, 'success');
       } else {
         const result = await response.json();
         showToast(result.error || 'No se pudo registrar la solicitud.', 'error');

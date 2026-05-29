@@ -13,6 +13,7 @@ import { Modalidad, TipoSolicitud, Cargo } from '@/types';
 
 interface StudentRequestRecord {
   id: string;
+  numero_radicado: string;
   fecha_solicitud: string;
   id_estudiante: string;
   nombres: string;

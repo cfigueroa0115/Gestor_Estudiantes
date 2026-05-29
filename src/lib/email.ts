@@ -2,8 +2,45 @@ import nodemailer from 'nodemailer';
 import { ESCALATION_EMAIL_CONFIG } from './email-config';
 
 /**
- * Send an escalation email when a student request is escalated to a specific area.
- * If SMTP is not configured (env vars missing), logs a warning and skips sending.
+ * Creates a nodemailer transporter configured for Microsoft 365 / Office 365.
+ * Uses STARTTLS on port 587 as required by Microsoft.
+ * 
+ * Environment variables required:
+ * - SMTP_HOST: smtp.office365.com
+ * - SMTP_PORT: 587
+ * - SMTP_USER: sandra.rodriguezac@ucc.edu.co
+ * - SMTP_PASS: App Password or account password (configured in Vercel, never in code)
+ * - SMTP_FROM: "Portal Gestión de Estudiantes UCC <sandra.rodriguezac@ucc.edu.co>"
+ */
+function createTransporter() {
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpPort = process.env.SMTP_PORT;
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+
+  if (!smtpHost || !smtpPort || !smtpUser || !smtpPass) {
+    return null;
+  }
+
+  return nodemailer.createTransport({
+    host: smtpHost,
+    port: parseInt(smtpPort, 10),
+    secure: false, // false for STARTTLS on port 587
+    auth: {
+      user: smtpUser,
+      pass: smtpPass,
+    },
+    tls: {
+      ciphers: 'SSLv3',
+      rejectUnauthorized: false,
+    },
+  });
+}
+
+/**
+ * Send an escalation email when a student request is escalated.
+ * Uses Microsoft 365 SMTP with STARTTLS.
+ * Sender: sandra.rodriguezac@ucc.edu.co (configured via SMTP_FROM env var)
  */
 export async function sendEscalationEmail(params: {
   area: string;
@@ -11,18 +48,21 @@ export async function sendEscalationEmail(params: {
   studentId: string;
   requestDescription: string;
   requestId: string;
+  numeroRadicado: string;
 }): Promise<boolean> {
-  const { area, studentName, studentId, requestDescription, requestId } = params;
+  const { area, studentName, studentId, requestDescription, numeroRadicado } = params;
 
-  // Check SMTP configuration
-  const smtpHost = process.env.SMTP_HOST;
-  const smtpPort = process.env.SMTP_PORT;
-  const smtpUser = process.env.SMTP_USER;
-  const smtpPass = process.env.SMTP_PASS;
   const smtpFrom = process.env.SMTP_FROM;
 
-  if (!smtpHost || !smtpPort || !smtpUser || !smtpPass || !smtpFrom) {
-    console.warn('[Email] SMTP no configurado. Variables faltantes: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM. Se omite el envío del correo de escalamiento.');
+  if (!smtpFrom) {
+    console.error('[Email] SMTP_FROM no configurado.');
+    return false;
+  }
+
+  const transporter = createTransporter();
+
+  if (!transporter) {
+    console.error('[Email] Servicio de correo no configurado. Variables faltantes: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS. Configure las credenciales en Vercel.');
     return false;
   }
 
@@ -32,20 +72,9 @@ export async function sendEscalationEmail(params: {
   );
 
   if (!emailConfig) {
-    console.warn(`[Email] No se encontró configuración de correo para el área: ${area}`);
+    console.error(`[Email] No se encontró configuración de correo para el área: ${area}`);
     return false;
   }
-
-  // Create transporter
-  const transporter = nodemailer.createTransport({
-    host: smtpHost,
-    port: parseInt(smtpPort, 10),
-    secure: parseInt(smtpPort, 10) === 465,
-    auth: {
-      user: smtpUser,
-      pass: smtpPass,
-    },
-  });
 
   const now = new Date();
   const fechaFormateada = now.toLocaleDateString('es-CO', {
@@ -57,36 +86,26 @@ export async function sendEscalationEmail(params: {
   });
 
   const htmlBody = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-      <h2 style="color: #333;">Solicitud Escalada - Portal de Gestión de Estudiantes UCC</h2>
-      <p>Se ha escalado una solicitud estudiantil al área <strong>${area}</strong>.</p>
-      <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
-        <tr>
-          <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">ID Solicitud</td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${requestId}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Estudiante</td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${studentName}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">ID Estudiante</td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${studentId}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Descripción</td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${requestDescription}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Área escalada</td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${area}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Fecha de escalamiento</td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${fechaFormateada}</td>
-        </tr>
-      </table>
-      <p style="color: #666; font-size: 12px;">Este es un correo automático generado por el Portal de Gestión de Estudiantes UCC.</p>
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <div style="background: linear-gradient(135deg, #00ccaf, #43a047); padding: 20px; border-radius: 8px 8px 0 0;">
+        <h2 style="color: #fff; margin: 0;">Solicitud Escalada</h2>
+        <p style="color: #e0f7fa; margin: 4px 0 0;">Portal de Gestión de Estudiantes UCC</p>
+      </div>
+      <div style="border: 1px solid #e0e0e0; border-top: none; padding: 20px; border-radius: 0 0 8px 8px;">
+        <p style="color: #333;">Se ha escalado una solicitud estudiantil al área <strong>${area}</strong>.</p>
+        <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
+          <tr><td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold; background: #f5f5f5;">N° Radicado</td><td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold; color: #00796b;">${numeroRadicado}</td></tr>
+          <tr><td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold; background: #f5f5f5;">Estudiante</td><td style="padding: 10px; border: 1px solid #e0e0e0;">${studentName}</td></tr>
+          <tr><td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold; background: #f5f5f5;">ID Estudiante</td><td style="padding: 10px; border: 1px solid #e0e0e0;">${studentId}</td></tr>
+          <tr><td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold; background: #f5f5f5;">Descripción</td><td style="padding: 10px; border: 1px solid #e0e0e0;">${requestDescription}</td></tr>
+          <tr><td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold; background: #f5f5f5;">Área escalada</td><td style="padding: 10px; border: 1px solid #e0e0e0;">${area}</td></tr>
+          <tr><td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold; background: #f5f5f5;">Fecha</td><td style="padding: 10px; border: 1px solid #e0e0e0;">${fechaFormateada}</td></tr>
+        </table>
+        <p style="color: #999; font-size: 11px; margin-top: 20px; border-top: 1px solid #eee; padding-top: 12px;">
+          Este es un correo automático generado por el Portal de Gestión de Estudiantes UCC.<br>
+          Programa de Ingeniería Industrial - Universidad Cooperativa de Colombia.
+        </p>
+      </div>
     </div>
   `;
 
@@ -95,14 +114,14 @@ export async function sendEscalationEmail(params: {
       from: smtpFrom,
       to: emailConfig.to,
       cc: emailConfig.cc.join(', '),
-      subject: `[Escalamiento] Solicitud estudiantil - Área ${area} - ${studentName}`,
+      subject: `[Escalamiento] Radicado ${numeroRadicado} - Área ${area} - ${studentName}`,
       html: htmlBody,
     });
 
-    console.log(`[Email] Correo de escalamiento enviado exitosamente para solicitud ${requestId} al área ${area}`);
+    console.log(`[Email] Correo enviado exitosamente. Radicado: ${numeroRadicado}, Área: ${area}, Destino: ${emailConfig.to}`);
     return true;
   } catch (error) {
-    console.error('[Email] Error al enviar correo de escalamiento:', error);
+    console.error('[Email] Error al enviar correo de escalamiento:', error instanceof Error ? error.message : error);
     return false;
   }
 }

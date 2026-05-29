@@ -4,6 +4,7 @@ import { Modalidad, TipoSolicitud, Cargo } from '@/types';
 
 interface StudentRequestRecord {
   id: string;
+  numero_radicado: string;
   fecha_solicitud: string;
   id_estudiante: string;
   nombres: string;
@@ -82,6 +83,7 @@ interface ColumnDef {
 }
 
 const COLUMNS: ColumnDef[] = [
+  { key: 'numero_radicado', label: 'N° Radicado', sortable: true, minWidth: '150px' },
   { key: 'fecha_solicitud', label: 'Fecha solicitud', sortable: true, minWidth: '120px' },
   { key: 'id_estudiante', label: 'ID Estudiante', sortable: true, minWidth: '110px' },
   { key: 'nombres', label: 'Nombres', sortable: true, minWidth: '120px' },
@@ -149,6 +151,8 @@ function SortIcon({ active, direction }: { active: boolean; direction: 'asc' | '
 
 function getCellValue(request: StudentRequestRecord, key: string): string {
   switch (key) {
+    case 'numero_radicado':
+      return request.numero_radicado || '';
     case 'fecha_solicitud':
       return formatDate(request.fecha_solicitud);
     case 'id_estudiante':

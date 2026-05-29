@@ -5,6 +5,7 @@ import { getSessionFromCookie } from '@/lib/auth';
 import { studentRequestSchema } from '@/lib/validations/student-request.schema';
 import { TipoSolicitud, Prisma } from '@prisma/client';
 import { sendEscalationEmail } from '@/lib/email';
+import { generateNumeroRadicado } from '@/lib/radicado';
 
 /**
  * Mapping from Zod schema tipo_solicitud values (with accents) to Prisma enum keys (without accents).
@@ -202,9 +203,13 @@ export async function POST(request: NextRequest) {
     // 4. Map tipo_solicitud from schema value to Prisma enum key
     const tipoSolicitudPrisma = TIPO_SOLICITUD_MAP[data.tipo_solicitud];
 
-    // 5. Insert record in DB with created_by_user_id = authenticated user id
+    // 5. Generate unique radicado number
+    const numeroRadicado = generateNumeroRadicado();
+
+    // 6. Insert record in DB with created_by_user_id = authenticated user id
     const created = await prisma.studentRequest.create({
       data: {
+        numero_radicado: numeroRadicado,
         fecha_solicitud: new Date(data.fecha_solicitud),
         id_estudiante: data.id_estudiante,
         nombres: data.nombres,
@@ -225,7 +230,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // 6. If escalation is required, update state and send email
+    // 7. If escalation is required, update state and send email
     if (data.requiere_escalar && data.area_escalar) {
       try {
         await prisma.studentRequest.update({
@@ -244,6 +249,7 @@ export async function POST(request: NextRequest) {
             studentId: data.id_estudiante,
             requestDescription: data.descripcion_solicitud,
             requestId: created.id,
+            numeroRadicado: numeroRadicado,
           });
         } catch (emailError) {
           console.error('[POST /api/student-requests] Error al enviar correo de escalamiento:', emailError);
@@ -253,8 +259,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 7. Return 201 with id of created record
-    return NextResponse.json({ id: created.id }, { status: 201 });
+    // 8. Return 201 with id and numero_radicado
+    return NextResponse.json({ id: created.id, numero_radicado: numeroRadicado }, { status: 201 });
   } catch {
     return NextResponse.json(
       { error: 'Ha ocurrido un error interno. Intente nuevamente.' },

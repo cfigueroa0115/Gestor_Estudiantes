@@ -10,6 +10,7 @@ const CSV_CONFIG = {
   delimiter: ';',
   bom: '\uFEFF', // UTF-8 BOM
   headers: [
+    'N° Radicado',
     'ID registro',
     'Fecha solicitud',
     'ID estudiante',
@@ -194,6 +195,7 @@ export async function GET(request: NextRequest) {
 
     const dataRows = records.map((record) => {
       const fields = [
+        record.numero_radicado,
         record.id,
         formatDate(record.fecha_solicitud),
         record.id_estudiante,

@@ -35,6 +35,7 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "student_requests" (
     "id" UUID NOT NULL,
+    "numero_radicado" VARCHAR(20) NOT NULL,
     "fecha_solicitud" DATE NOT NULL,
     "id_estudiante" VARCHAR(10) NOT NULL,
     "nombres" VARCHAR(100) NOT NULL,
@@ -61,6 +62,9 @@ CREATE TABLE "student_requests" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_usuario_key" ON "users"("usuario");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "student_requests_numero_radicado_key" ON "student_requests"("numero_radicado");
 
 -- AddForeignKey
 ALTER TABLE "users" ADD CONSTRAINT "users_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
