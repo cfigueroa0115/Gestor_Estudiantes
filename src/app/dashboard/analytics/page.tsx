@@ -121,7 +121,7 @@ export default function AnalyticsPage() {
           <h3 className="mb-4 text-sm font-semibold text-gris-800">Distribuci&oacute;n por Estado</h3>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
-              <Pie data={estadoData} cx="50%" cy="50%" outerRadius={90} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
+              <Pie data={estadoData} cx="50%" cy="50%" outerRadius={90} dataKey="value" label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`} labelLine={false}>
                 {estadoData.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
               </Pie>
               <Tooltip />
