@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { LandingClient } from "@/components/landing/LandingClient";
 
 export default function Home() {
@@ -12,13 +13,15 @@ export default function Home() {
 
       {/* Header */}
       <header className="relative z-10 flex items-center justify-between px-4 py-4 md:px-8 lg:px-16">
-        <div className="flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-aguamarina-500 to-verde-600">
-            <span className="text-lg font-bold text-white">U</span>
-          </div>
-          <span className="text-sm font-semibold text-gris-800 md:text-base">
-            UCC
-          </span>
+        <div className="flex items-center gap-3">
+          <Image
+            src="/logo-ucc.jpeg"
+            alt="Logo Universidad Cooperativa de Colombia"
+            width={48}
+            height={48}
+            className="h-12 w-12 rounded-lg object-contain"
+            priority
+          />
         </div>
       </header>
 
