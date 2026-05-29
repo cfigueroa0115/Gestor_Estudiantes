@@ -18,6 +18,7 @@ interface StudentRequestRecord {
   descripcion_solicitud: string;
   requiere_escalar: boolean;
   area_escalar: string | null;
+  estado_solicitud: string;
   created_at: string;
   creator: {
     usuario: string;
@@ -95,6 +96,7 @@ const COLUMNS: ColumnDef[] = [
   { key: 'descripcion_solicitud', label: 'Descripción', sortable: false, minWidth: '200px' },
   { key: 'requiere_escalar', label: 'Requiere escalar', sortable: false, minWidth: '120px' },
   { key: 'area_escalar', label: 'Área escalar', sortable: false, minWidth: '110px' },
+  { key: 'estado_solicitud', label: 'Estado actual', sortable: false, minWidth: '120px' },
   { key: 'creator_usuario', label: 'Usuario creador', sortable: false, minWidth: '120px' },
   { key: 'creator_cargo', label: 'Cargo creador', sortable: false, minWidth: '110px' },
   { key: 'created_at', label: 'Fecha creación', sortable: true, minWidth: '140px' },
@@ -175,6 +177,8 @@ function getCellValue(request: StudentRequestRecord, key: string): string {
       return request.requiere_escalar ? 'Sí' : 'No';
     case 'area_escalar':
       return renderNullable(request.area_escalar);
+    case 'estado_solicitud':
+      return request.estado_solicitud || '';
     case 'creator_usuario':
       return request.creator?.usuario || '';
     case 'creator_cargo':
@@ -243,6 +247,16 @@ export function RequestTable({
                     {col.key === 'descripcion_solicitud' ? (
                       <span className="block max-w-[200px] truncate">
                         {getCellValue(request, col.key)}
+                      </span>
+                    ) : col.key === 'estado_solicitud' ? (
+                      <span
+                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                          request.estado_solicitud === 'Escalada'
+                            ? 'bg-amber-100 text-amber-800'
+                            : 'bg-green-100 text-green-800'
+                        }`}
+                      >
+                        {request.estado_solicitud || 'Radicada'}
                       </span>
                     ) : (
                       getCellValue(request, col.key)

@@ -43,6 +43,8 @@ const mockRecord = {
   descripcion_solicitud: 'Solicitud de validación de materia',
   requiere_escalar: true,
   area_escalar: 'Financiera',
+  estado_solicitud: 'Radicada',
+  estado_solicitud_fecha: new Date('2024-06-15T10:30:00'),
   created_by_user_id: 'user-uuid-123',
   created_at: new Date('2024-06-15T10:30:00'),
   updated_at: new Date('2024-06-15T11:00:00'),
@@ -113,7 +115,7 @@ describe('GET /api/student-requests/export', () => {
 
     // Header row should have semicolons
     const headerLine = lines[0].replace('\uFEFF', '');
-    expect(headerLine.split(';').length).toBe(19); // 19 columns
+    expect(headerLine.split(';').length).toBe(21); // 21 columns
   });
 
   it('should include correct Spanish headers', async () => {
@@ -129,6 +131,7 @@ describe('GET /api/student-requests/export', () => {
       'Apellidos', 'Correo', 'Celular', 'Programa', 'Modalidad',
       'Tipo solicitud', 'Solicitud académica', 'Solicitud financiera',
       'Descripción solicitud', 'Requiere escalar', 'Área a escalar',
+      'Estado actual', 'Fecha estado',
       'Usuario creador', 'Cargo creador', 'Fecha creación', 'Fecha actualización',
     ];
 
@@ -233,9 +236,9 @@ describe('GET /api/student-requests/export', () => {
     const lines = text.split('\n');
     const fields = lines[1].split(';');
 
-    // created_at is index 17, updated_at is index 18
-    expect(fields[17]).toBe('2024-06-15 10:30');
-    expect(fields[18]).toBe('2024-06-15 11:00');
+    // created_at is index 19, updated_at is index 20
+    expect(fields[19]).toBe('2024-06-15 10:30');
+    expect(fields[20]).toBe('2024-06-15 11:00');
   });
 
   it('should pass filters to prisma query', async () => {

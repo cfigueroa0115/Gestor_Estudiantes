@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { getSessionFromCookie } from '@/lib/auth';
 import { studentRequestSchema } from '@/lib/validations/student-request.schema';
 import { TipoSolicitud, Prisma } from '@prisma/client';
+import { sendEscalationEmail } from '@/lib/email';
 
 /**
  * Mapping from Zod schema tipo_solicitud values (with accents) to Prisma enum keys (without accents).
@@ -219,10 +220,40 @@ export async function POST(request: NextRequest) {
         requiere_escalar: data.requiere_escalar,
         area_escalar: data.area_escalar ?? null,
         created_by_user_id: session.id,
+        estado_solicitud: 'Radicada',
+        estado_solicitud_fecha: new Date(),
       },
     });
 
-    // 6. Return 201 with id of created record
+    // 6. If escalation is required, update state and send email
+    if (data.requiere_escalar && data.area_escalar) {
+      try {
+        await prisma.studentRequest.update({
+          where: { id: created.id },
+          data: {
+            estado_solicitud: 'Escalada',
+            estado_solicitud_fecha: new Date(),
+          },
+        });
+
+        // Send escalation email (don't fail the request if email fails)
+        try {
+          await sendEscalationEmail({
+            area: data.area_escalar,
+            studentName: `${data.nombres} ${data.apellidos}`,
+            studentId: data.id_estudiante,
+            requestDescription: data.descripcion_solicitud,
+            requestId: created.id,
+          });
+        } catch (emailError) {
+          console.error('[POST /api/student-requests] Error al enviar correo de escalamiento:', emailError);
+        }
+      } catch (escalationError) {
+        console.error('[POST /api/student-requests] Error al escalar solicitud:', escalationError);
+      }
+    }
+
+    // 7. Return 201 with id of created record
     return NextResponse.json({ id: created.id }, { status: 201 });
   } catch {
     return NextResponse.json(

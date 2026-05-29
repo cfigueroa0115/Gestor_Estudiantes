@@ -27,6 +27,7 @@ interface StudentRequestRecord {
   descripcion_solicitud: string;
   requiere_escalar: boolean;
   area_escalar: string | null;
+  estado_solicitud: string;
   created_at: string;
   creator: {
     usuario: string;

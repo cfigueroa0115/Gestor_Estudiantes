@@ -29,6 +29,11 @@ enum TipoSolicitud {
   Certificados
 }
 
+enum EstadoSolicitud {
+  Radicada
+  Escalada
+}
+
 model User {
   id              String    @id @default(uuid()) @db.Uuid
   usuario         String    @unique @db.VarChar(20)
@@ -73,6 +78,8 @@ model StudentRequest {
   descripcion_solicitud  String         @db.VarChar(1200)
   requiere_escalar       Boolean
   area_escalar           String?        @db.VarChar(50)
+  estado_solicitud       EstadoSolicitud @default(Radicada)
+  estado_solicitud_fecha DateTime       @default(now())
   created_by_user_id     String         @db.Uuid
   created_at             DateTime       @default(now())
   updated_at             DateTime       @updatedAt
