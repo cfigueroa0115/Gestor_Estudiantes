@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/shared/Toast';
 import { LoadingSkeleton } from '@/components/shared/LoadingSkeleton';
 import { ErrorState } from '@/components/shared/ErrorState';
@@ -22,6 +23,7 @@ interface UserRecord {
 
 export default function UsersPage() {
   const { showToast } = useToast();
+  const router = useRouter();
 
   // Data state
   const [users, setUsers] = useState<UserRecord[]>([]);
@@ -128,6 +130,17 @@ export default function UsersPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 md:px-8 lg:px-16">
+      {/* Back button */}
+      <button
+        onClick={() => router.push('/dashboard')}
+        className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gris-600 transition-colors hover:text-aguamarina-600"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+        Volver al Gestor
+      </button>
+
       {/* Header */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>

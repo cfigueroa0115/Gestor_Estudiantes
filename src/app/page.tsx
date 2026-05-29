@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { LandingClient } from "@/components/landing/LandingClient";
 
 export default function Home() {
@@ -13,16 +14,16 @@ export default function Home() {
 
       {/* Header */}
       <header className="relative z-10 flex items-center justify-between px-4 py-4 md:px-8 lg:px-16">
-        <div className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-80">
           <Image
             src="/logo-ucc.jpeg"
             alt="Logo Universidad Cooperativa de Colombia"
-            width={48}
-            height={48}
-            className="h-12 w-12 rounded-lg object-contain"
+            width={160}
+            height={64}
+            className="h-16 w-auto object-contain"
             priority
           />
-        </div>
+        </Link>
       </header>
 
       {/* Client-side interactive content */}

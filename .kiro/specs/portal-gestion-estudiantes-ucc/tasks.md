@@ -293,7 +293,7 @@ Implementación incremental del portal full-stack con Next.js 14 (App Router), T
     - Verificar que todas las queries usan Prisma parameterized queries (prevención SQL injection)
     - _Requirements: 11.2, 11.3, 11.4_
 
-- [x] 11. Checkpoint final - Verificar integración completa
+- [x] tasak final - Verificar integración completa
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes
