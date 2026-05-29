@@ -34,7 +34,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-gris-200 bg-white/80 px-4 py-6 text-center backdrop-blur-sm md:px-8">
         <p className="text-sm text-gris-600">
-          © Mgtr. Carlos Alberto Figueroa
+          © Mgtr. Carlos Alberto Figueroa Martínez || Programa de Ingenieria industrial
         </p>
       </footer>
     </main>
