@@ -33,6 +33,7 @@ function getTodayDate(): string {
 export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentRequestFormModalProps) {
   const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [radicadoConfirmation, setRadicadoConfirmation] = useState<string | null>(null);
 
   const { register, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<StudentRequestInput>({
     resolver: zodResolver(studentRequestSchema),
@@ -65,7 +66,7 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
       if (response.ok) {
         const result = await response.json();
         reset(); onClose(); onSuccess();
-        showToast(`Solicitud radicada exitosamente. N° Radicado: ${result.numero_radicado}`, 'success');
+        setRadicadoConfirmation(result.numero_radicado);
       } else {
         const result = await response.json();
         showToast(result.error || 'No se pudo registrar la solicitud.', 'error');
@@ -92,6 +93,34 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
   };
 
   if (!isOpen) return null;
+
+  // Popup de confirmación de radicado
+  if (radicadoConfirmation) {
+    return (
+      <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Solicitud radicada">
+        <div className="mx-4 w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl text-center">
+          <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-gris-900 mb-2">¡Solicitud Radicada!</h2>
+          <p className="text-sm text-gris-600 mb-6">Su solicitud ha sido registrada exitosamente en el sistema.</p>
+          <div className="rounded-xl bg-aguamarina-50 border-2 border-aguamarina-200 p-5 mb-6">
+            <p className="text-xs font-medium text-aguamarina-700 uppercase tracking-wide mb-1">Número de Radicado</p>
+            <p className="text-2xl font-bold text-aguamarina-800 tracking-wider">{radicadoConfirmation}</p>
+          </div>
+          <p className="text-xs text-gris-500 mb-6">Guarde este número para consultar el estado de su solicitud.</p>
+          <button
+            onClick={() => setRadicadoConfirmation(null)}
+            className="w-full rounded-lg bg-aguamarina-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-aguamarina-700 focus:outline-none focus:ring-2 focus:ring-aguamarina-500 focus:ring-offset-2"
+          >
+            Entendido
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const inputClass = (hasError: boolean) =>
     `w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:border-aguamarina-500 focus:ring-1 focus:ring-aguamarina-500 ${hasError ? 'border-red-500' : 'border-gris-300'}`;
