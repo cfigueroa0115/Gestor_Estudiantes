@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/shared/Toast';
 
 interface ModuleCardsProps {
@@ -11,6 +12,7 @@ interface ModuleCard {
   description: string;
   enabled: boolean;
   badge?: string;
+  route?: string;
 }
 
 const modules: ModuleCard[] = [
@@ -20,10 +22,10 @@ const modules: ModuleCard[] = [
     enabled: true,
   },
   {
-    title: 'Gestión salas docentes',
-    description: 'Administra las salas de docentes',
-    enabled: false,
-    badge: 'Próximamente',
+    title: 'Gestionar solicitudes creadas',
+    description: 'Gestione y de seguimiento a las solicitudes radicadas por los estudiantes',
+    enabled: true,
+    route: '/dashboard/manage-requests',
   },
   {
     title: 'Gestión salas administrativas',
@@ -35,10 +37,15 @@ const modules: ModuleCard[] = [
 
 export function ModuleCards({ onVirtualRoomClick }: ModuleCardsProps) {
   const { showToast } = useToast();
+  const router = useRouter();
 
   const handleCardClick = (module: ModuleCard) => {
     if (module.enabled) {
-      onVirtualRoomClick();
+      if (module.route) {
+        router.push(module.route);
+      } else {
+        onVirtualRoomClick();
+      }
     } else {
       showToast('Módulo en construcción', 'error');
     }

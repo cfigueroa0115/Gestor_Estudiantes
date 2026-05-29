@@ -32,6 +32,8 @@ enum TipoSolicitud {
 enum EstadoSolicitud {
   Radicada
   Escalada
+  EnProgreso  @map("En progreso")
+  Cerrada
 }
 
 model User {
@@ -81,6 +83,7 @@ model StudentRequest {
   area_escalar           String?        @db.VarChar(50)
   estado_solicitud       EstadoSolicitud @default(Radicada)
   estado_solicitud_fecha DateTime       @default(now())
+  observaciones          String?        @db.VarChar(1200)
   created_by_user_id     String         @db.Uuid
   created_at             DateTime       @default(now())
   updated_at             DateTime       @updatedAt

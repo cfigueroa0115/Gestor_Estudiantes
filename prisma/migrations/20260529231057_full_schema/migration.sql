@@ -11,7 +11,7 @@ CREATE TYPE "Modalidad" AS ENUM ('Presencial', 'Virtual', 'Funza');
 CREATE TYPE "TipoSolicitud" AS ENUM ('Académico', 'Financiero', 'Certificados');
 
 -- CreateEnum
-CREATE TYPE "EstadoSolicitud" AS ENUM ('Radicada', 'Escalada');
+CREATE TYPE "EstadoSolicitud" AS ENUM ('Radicada', 'Escalada', 'En progreso', 'Cerrada');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -52,6 +52,7 @@ CREATE TABLE "student_requests" (
     "area_escalar" VARCHAR(50),
     "estado_solicitud" "EstadoSolicitud" NOT NULL DEFAULT 'Radicada',
     "estado_solicitud_fecha" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "observaciones" VARCHAR(1200),
     "created_by_user_id" UUID NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
