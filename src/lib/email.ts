@@ -1,46 +1,14 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import { ESCALATION_EMAIL_CONFIG } from './email-config';
 
 /**
- * Creates a nodemailer transporter configured for Microsoft 365 / Office 365.
- * Uses STARTTLS on port 587 as required by Microsoft.
- * 
- * Environment variables required:
- * - SMTP_HOST: smtp.office365.com
- * - SMTP_PORT: 587
- * - SMTP_USER: sandra.rodriguezac@ucc.edu.co
- * - SMTP_PASS: App Password or account password (configured in Vercel, never in code)
- * - SMTP_FROM: "Portal Gestión de Estudiantes UCC <sandra.rodriguezac@ucc.edu.co>"
- */
-function createTransporter() {
-  const smtpHost = process.env.SMTP_HOST;
-  const smtpPort = process.env.SMTP_PORT;
-  const smtpUser = process.env.SMTP_USER;
-  const smtpPass = process.env.SMTP_PASS;
-
-  if (!smtpHost || !smtpPort || !smtpUser || !smtpPass) {
-    return null;
-  }
-
-  return nodemailer.createTransport({
-    host: smtpHost,
-    port: parseInt(smtpPort, 10),
-    secure: false, // false for STARTTLS on port 587
-    auth: {
-      user: smtpUser,
-      pass: smtpPass,
-    },
-    tls: {
-      ciphers: 'SSLv3',
-      rejectUnauthorized: false,
-    },
-  });
-}
-
-/**
  * Send an escalation email when a student request is escalated.
- * Uses Microsoft 365 SMTP with STARTTLS.
- * Sender: sandra.rodriguezac@ucc.edu.co (configured via SMTP_FROM env var)
+ * Uses Resend API for reliable email delivery from serverless environments.
+ * 
+ * Required env var: RESEND_API_KEY
+ * When Microsoft 365 credentials are available, the from address will be
+ * sandra.rodriguezac@ucc.edu.co (requires domain verification in Resend).
+ * For now uses onboarding@resend.dev as sender.
  */
 export async function sendEscalationEmail(params: {
   area: string;
@@ -52,17 +20,10 @@ export async function sendEscalationEmail(params: {
 }): Promise<boolean> {
   const { area, studentName, studentId, requestDescription, numeroRadicado } = params;
 
-  const smtpFrom = process.env.SMTP_FROM;
+  const apiKey = process.env.RESEND_API_KEY;
 
-  if (!smtpFrom) {
-    console.error('[Email] SMTP_FROM no configurado.');
-    return false;
-  }
-
-  const transporter = createTransporter();
-
-  if (!transporter) {
-    console.error('[Email] Servicio de correo no configurado. Variables faltantes: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS. Configure las credenciales en Vercel.');
+  if (!apiKey) {
+    console.error('[Email] Servicio de correo no configurado. Falta RESEND_API_KEY.');
     return false;
   }
 
@@ -78,12 +39,11 @@ export async function sendEscalationEmail(params: {
 
   const now = new Date();
   const fechaFormateada = now.toLocaleDateString('es-CO', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit',
   });
+
+  const fromAddress = process.env.EMAIL_FROM || 'Portal Gestión Estudiantes UCC <onboarding@resend.dev>';
 
   const htmlBody = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -110,18 +70,24 @@ export async function sendEscalationEmail(params: {
   `;
 
   try {
-    await transporter.sendMail({
-      from: smtpFrom,
-      to: emailConfig.to,
-      cc: emailConfig.cc.join(', '),
+    const resend = new Resend(apiKey);
+    const { error } = await resend.emails.send({
+      from: fromAddress,
+      to: [emailConfig.to],
+      cc: emailConfig.cc,
       subject: `[Escalamiento] Radicado ${numeroRadicado} - Área ${area} - ${studentName}`,
       html: htmlBody,
     });
 
-    console.log(`[Email] Correo enviado exitosamente. Radicado: ${numeroRadicado}, Área: ${area}, Destino: ${emailConfig.to}`);
+    if (error) {
+      console.error('[Email] Error de Resend:', error.message);
+      return false;
+    }
+
+    console.log(`[Email] Correo enviado. Radicado: ${numeroRadicado}, Área: ${area}, Destino: ${emailConfig.to}, CC: ${emailConfig.cc.join(', ')}`);
     return true;
   } catch (error) {
-    console.error('[Email] Error al enviar correo de escalamiento:', error instanceof Error ? error.message : error);
+    console.error('[Email] Error al enviar correo:', error instanceof Error ? error.message : error);
     return false;
   }
 }
