@@ -63,6 +63,7 @@ export async function sendEscalationEmail(params: {
     const recipients = [emailConfig.to];
     const ccList = emailConfig.cc.length > 0 ? emailConfig.cc : undefined;
 
+    // Intentar enviar con CC
     const { error } = await resend.emails.send({
       from: fromAddress,
       to: recipients,
@@ -72,6 +73,22 @@ export async function sendEscalationEmail(params: {
     });
 
     if (error) {
+      // Si falla con CC, reintentar sin CC
+      if (ccList && ccList.length > 0) {
+        console.warn('[Email] Fallo con CC, reintentando sin CC:', error.message);
+        const { error: retryError } = await resend.emails.send({
+          from: fromAddress,
+          to: recipients,
+          subject: `[Escalamiento] Radicado ${numeroRadicado} - Area ${area} - ${studentName}`,
+          html: htmlBody,
+        });
+        if (retryError) {
+          console.error('[Email] Error en reintento sin CC:', retryError.message);
+          return false;
+        }
+        console.log(`[Email] Correo enviado sin CC. Radicado: ${numeroRadicado}, To: ${emailConfig.to}`);
+        return true;
+      }
       console.error('[Email] Error de Resend:', error.message);
       return false;
     }
