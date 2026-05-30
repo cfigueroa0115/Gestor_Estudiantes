@@ -62,10 +62,10 @@ export default function DashboardPage() {
         {isAdmin && (
           <button
             onClick={() => router.push('/dashboard/analytics')}
-            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-gris-700 px-5 py-2.5 text-sm font-medium text-white shadow-lg transition-all hover:bg-gris-800 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gris-500 focus-visible:ring-offset-2"
+            className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-xl border-2 border-aguamarina-400 bg-gradient-to-r from-aguamarina-600 via-verde-600 to-aguamarina-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-aguamarina-500/30 transition-all hover:scale-105 hover:shadow-xl hover:shadow-aguamarina-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-aguamarina-400 focus-visible:ring-offset-2"
           >
-            <span className="absolute inset-0 animate-pulse bg-gradient-to-r from-transparent via-white/10 to-transparent"></span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <span className="absolute inset-0 animate-pulse bg-gradient-to-r from-transparent via-white/20 to-transparent"></span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="relative h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
             </svg>
             <span className="relative">Dashboard</span>
