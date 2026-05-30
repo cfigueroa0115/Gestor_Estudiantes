@@ -62,14 +62,13 @@ export default function DashboardPage() {
         {isAdmin && (
           <button
             onClick={() => router.push('/dashboard/analytics')}
-            className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl border border-aguamarina-300/50 bg-gradient-to-r from-verde-600 via-aguamarina-500 to-aguamarina-400 px-8 py-4 text-base font-bold text-white shadow-[0_8px_30px_rgba(0,204,175,0.4)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_12px_40px_rgba(0,204,175,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-aguamarina-400 focus-visible:ring-offset-2"
+            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-aguamarina-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(0,204,175,0.35)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_6px_25px_rgba(0,204,175,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-aguamarina-400 focus-visible:ring-offset-2"
           >
-            <span className="absolute inset-0 bg-[linear-gradient(110deg,transparent_25%,rgba(255,255,255,0.3)_50%,transparent_75%)] bg-[length:250%_100%] animate-[shimmer_2.5s_ease-in-out_infinite]"></span>
-            <span className="absolute inset-0 rounded-2xl border border-white/20"></span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="relative h-6 w-6 drop-shadow-sm" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <span className="absolute inset-0 bg-[linear-gradient(110deg,transparent_30%,rgba(255,255,255,0.25)_50%,transparent_70%)] bg-[length:200%_100%] animate-[shimmer_3s_ease-in-out_infinite]"></span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="relative h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
             </svg>
-            <span className="relative text-lg tracking-wide drop-shadow-sm">Dashboard</span>
+            <span className="relative">Dashboard</span>
           </button>
         )}
       </section>
