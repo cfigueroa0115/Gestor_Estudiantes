@@ -13,6 +13,16 @@
   100% { background-position: 250% 0; }
 }
 
+@keyframes glow-red {
+  0%, 100% { box-shadow: 0 0 4px rgba(220, 38, 38, 0.3); }
+  50% { box-shadow: 0 0 12px rgba(220, 38, 38, 0.6); }
+}
+
+@keyframes glow-yellow {
+  0%, 100% { box-shadow: 0 0 4px rgba(202, 138, 4, 0.3); }
+  50% { box-shadow: 0 0 10px rgba(202, 138, 4, 0.5); }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
