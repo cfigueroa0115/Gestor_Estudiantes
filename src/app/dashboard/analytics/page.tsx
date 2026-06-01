@@ -162,7 +162,7 @@ export default function AnalyticsPage() {
 
           {/* Pie Chart - Semaphore */}
           <div className="flex items-center justify-center">
-            <ResponsiveContainer width="100%" height={280}>
+            <ResponsiveContainer width="100%" height={320}>
               <PieChart>
                 <Pie
                   data={[
@@ -171,7 +171,7 @@ export default function AnalyticsPage() {
                     { name: 'Vencidas', value: stats.semaforo?.vencida || 0, fill: '#ef4444' },
                   ]}
                   cx="50%" cy="50%"
-                  innerRadius={60} outerRadius={110}
+                  innerRadius={45} outerRadius={80}
                   dataKey="value"
                   label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
                   labelLine={true}
