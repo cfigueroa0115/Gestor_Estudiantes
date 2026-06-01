@@ -174,7 +174,7 @@ export default function AnalyticsPage() {
                   innerRadius={45} outerRadius={80}
                   dataKey="value"
                   label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
-                  labelLine={true}
+                  labelLine={false}
                   strokeWidth={3}
                   stroke="#fff"
                 >
