@@ -35,6 +35,7 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
   const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [radicadoConfirmation, setRadicadoConfirmation] = useState<string | null>(null);
+  const [studentFound, setStudentFound] = useState(false);
 
   const { register, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<StudentRequestInput>({
     resolver: zodResolver(studentRequestSchema),
@@ -80,7 +81,7 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
     }
   };
 
-  const handleClose = () => { if (!isSubmitting) { reset(); onClose(); } };
+  const handleClose = () => { if (!isSubmitting) { reset(); setStudentFound(false); onClose(); } };
 
   const handleTipoSolicitudChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setValue('tipo_solicitud', e.target.value as StudentRequestInput['tipo_solicitud']);
@@ -125,21 +126,31 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
   // Auto-lookup student by ID
   const handleIdEstudianteBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const id = e.target.value;
-    if (id.length >= 3) {
-      const result = await lookupStudent(id);
-      if (result) {
-        if (result.nombres) setValue('nombres', result.nombres);
-        if (result.apellidos) setValue('apellidos', result.apellidos);
-        if (result.correo) setValue('correo', result.correo);
-        if (result.celular) setValue('celular', result.celular);
-      }
+    if (!id || id.length < 3) {
+      // Clear fields when ID is empty or too short
+      setValue('nombres', '');
+      setValue('apellidos', '');
+      setValue('correo', '');
+      setValue('celular', '');
+      setStudentFound(false);
+      return;
+    }
+    const result = await lookupStudent(id);
+    if (result) {
+      if (result.nombres) setValue('nombres', result.nombres);
+      if (result.apellidos) setValue('apellidos', result.apellidos);
+      if (result.correo) setValue('correo', result.correo);
+      if (result.celular) setValue('celular', result.celular);
+      setStudentFound(true);
+    } else {
+      setStudentFound(false);
     }
   };
 
   if (!isOpen) return null;
 
-  const inputClass = (hasError: boolean) =>
-    `w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:border-aguamarina-500 focus:ring-1 focus:ring-aguamarina-500 ${hasError ? 'border-red-500' : 'border-gris-300'}`;
+  const inputClass = (hasError: boolean, readonly?: boolean) =>
+    `w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:border-aguamarina-500 focus:ring-1 focus:ring-aguamarina-500 ${hasError ? 'border-red-500' : 'border-gris-300'} ${readonly ? 'bg-gris-100 text-gris-600 cursor-not-allowed' : ''}`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={handleClose} role="dialog" aria-modal="true" aria-label="Formulario de solicitud estudiantil">
@@ -165,22 +176,22 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
               </div>
               <div>
                 <label htmlFor="nombres" className="mb-1 block text-sm font-medium text-gris-700">Nombres</label>
-                <input id="nombres" type="text" maxLength={100} placeholder="Nombres del estudiante" className={inputClass(!!errors.nombres)} {...register('nombres')} disabled={isSubmitting} />
+                <input id="nombres" type="text" maxLength={100} placeholder="Nombres del estudiante" className={inputClass(!!errors.nombres, studentFound)} {...register('nombres')} disabled={isSubmitting || studentFound} />
                 {errors.nombres && <p className="mt-1 text-xs text-red-600">{errors.nombres.message}</p>}
               </div>
               <div>
                 <label htmlFor="apellidos" className="mb-1 block text-sm font-medium text-gris-700">Apellidos</label>
-                <input id="apellidos" type="text" maxLength={100} placeholder="Apellidos del estudiante" className={inputClass(!!errors.apellidos)} {...register('apellidos')} disabled={isSubmitting} />
+                <input id="apellidos" type="text" maxLength={100} placeholder="Apellidos del estudiante" className={inputClass(!!errors.apellidos, studentFound)} {...register('apellidos')} disabled={isSubmitting || studentFound} />
                 {errors.apellidos && <p className="mt-1 text-xs text-red-600">{errors.apellidos.message}</p>}
               </div>
               <div>
                 <label htmlFor="correo" className="mb-1 block text-sm font-medium text-gris-700">Correo electrónico</label>
-                <input id="correo" type="email" placeholder="correo@ejemplo.com" className={inputClass(!!errors.correo)} {...register('correo')} disabled={isSubmitting} />
+                <input id="correo" type="email" placeholder="correo@ejemplo.com" className={inputClass(!!errors.correo, studentFound)} {...register('correo')} disabled={isSubmitting || studentFound} />
                 {errors.correo && <p className="mt-1 text-xs text-red-600">{errors.correo.message}</p>}
               </div>
               <div>
                 <label htmlFor="celular" className="mb-1 block text-sm font-medium text-gris-700">Celular</label>
-                <input id="celular" type="text" inputMode="numeric" maxLength={15} placeholder="Máximo 15 dígitos" className={inputClass(!!errors.celular)} {...register('celular')} disabled={isSubmitting} />
+                <input id="celular" type="text" inputMode="numeric" maxLength={15} placeholder="Máximo 15 dígitos" className={inputClass(!!errors.celular, studentFound)} {...register('celular')} disabled={isSubmitting || studentFound} />
                 {errors.celular && <p className="mt-1 text-xs text-red-600">{errors.celular.message}</p>}
               </div>
             </div>

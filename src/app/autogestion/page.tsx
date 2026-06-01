@@ -29,6 +29,7 @@ export default function AutogestionPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [radicado, setRadicado] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [studentFound, setStudentFound] = useState(false);
 
   const { register, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<StudentRequestInput>({
     resolver: zodResolver(studentRequestSchema),
@@ -48,19 +49,28 @@ export default function AutogestionPage() {
 
   const handleIdEstudianteBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const id = e.target.value;
-    if (id.length >= 3) {
-      const result = await lookupStudent(id);
-      if (result) {
-        if (result.nombres) setValue('nombres', result.nombres);
-        if (result.apellidos) setValue('apellidos', result.apellidos);
-        if (result.correo) setValue('correo', result.correo);
-        if (result.celular) setValue('celular', result.celular);
-      }
+    if (!id || id.length < 3) {
+      setValue('nombres', '');
+      setValue('apellidos', '');
+      setValue('correo', '');
+      setValue('celular', '');
+      setStudentFound(false);
+      return;
+    }
+    const result = await lookupStudent(id);
+    if (result) {
+      if (result.nombres) setValue('nombres', result.nombres);
+      if (result.apellidos) setValue('apellidos', result.apellidos);
+      if (result.correo) setValue('correo', result.correo);
+      if (result.celular) setValue('celular', result.celular);
+      setStudentFound(true);
+    } else {
+      setStudentFound(false);
     }
   };
 
-  const inputClass = (hasError: boolean) =>
-    `w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:border-aguamarina-500 focus:ring-1 focus:ring-aguamarina-500 ${hasError ? 'border-red-500' : 'border-gris-300'}`;
+  const inputClass = (hasError: boolean, readonly?: boolean) =>
+    `w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:border-aguamarina-500 focus:ring-1 focus:ring-aguamarina-500 ${hasError ? 'border-red-500' : 'border-gris-300'} ${readonly ? 'bg-gris-100 text-gris-600 cursor-not-allowed' : ''}`;
 
   const onSubmit = async (data: StudentRequestInput) => {
     setIsSubmitting(true);
@@ -149,22 +159,22 @@ export default function AutogestionPage() {
                 </div>
                 <div>
                   <label htmlFor="nombres" className="mb-1 block text-sm font-medium text-gris-700">Nombres</label>
-                  <input id="nombres" type="text" maxLength={100} placeholder="Nombres" className={inputClass(!!errors.nombres)} {...register('nombres')} disabled={isSubmitting} />
+                  <input id="nombres" type="text" maxLength={100} placeholder="Nombres" className={inputClass(!!errors.nombres, studentFound)} {...register('nombres')} disabled={isSubmitting || studentFound} />
                   {errors.nombres && <p className="mt-1 text-xs text-red-600">{errors.nombres.message}</p>}
                 </div>
                 <div>
                   <label htmlFor="apellidos" className="mb-1 block text-sm font-medium text-gris-700">Apellidos</label>
-                  <input id="apellidos" type="text" maxLength={100} placeholder="Apellidos" className={inputClass(!!errors.apellidos)} {...register('apellidos')} disabled={isSubmitting} />
+                  <input id="apellidos" type="text" maxLength={100} placeholder="Apellidos" className={inputClass(!!errors.apellidos, studentFound)} {...register('apellidos')} disabled={isSubmitting || studentFound} />
                   {errors.apellidos && <p className="mt-1 text-xs text-red-600">{errors.apellidos.message}</p>}
                 </div>
                 <div>
                   <label htmlFor="correo" className="mb-1 block text-sm font-medium text-gris-700">Correo electr&oacute;nico</label>
-                  <input id="correo" type="email" placeholder="correo@ejemplo.com" className={inputClass(!!errors.correo)} {...register('correo')} disabled={isSubmitting} />
+                  <input id="correo" type="email" placeholder="correo@ejemplo.com" className={inputClass(!!errors.correo, studentFound)} {...register('correo')} disabled={isSubmitting || studentFound} />
                   {errors.correo && <p className="mt-1 text-xs text-red-600">{errors.correo.message}</p>}
                 </div>
                 <div>
                   <label htmlFor="celular" className="mb-1 block text-sm font-medium text-gris-700">Celular</label>
-                  <input id="celular" type="text" inputMode="numeric" maxLength={15} placeholder="Máximo 15 dígitos" className={inputClass(!!errors.celular)} {...register('celular')} disabled={isSubmitting} />
+                  <input id="celular" type="text" inputMode="numeric" maxLength={15} placeholder="Máximo 15 dígitos" className={inputClass(!!errors.celular, studentFound)} {...register('celular')} disabled={isSubmitting || studentFound} />
                   {errors.celular && <p className="mt-1 text-xs text-red-600">{errors.celular.message}</p>}
                 </div>
               </div>
