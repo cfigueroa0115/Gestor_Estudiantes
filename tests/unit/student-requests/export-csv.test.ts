@@ -29,6 +29,7 @@ const mockSession = {
 
 const mockRecord = {
   id: 'record-uuid-1',
+  numero_radicado: 'RAD-20240615-TEST1',
   fecha_solicitud: new Date('2024-06-15'),
   id_estudiante: '1234567890',
   nombres: 'Juan Carlos',
@@ -45,6 +46,8 @@ const mockRecord = {
   area_escalar: 'Financiera',
   estado_solicitud: 'Radicada',
   estado_solicitud_fecha: new Date('2024-06-15T10:30:00'),
+  observaciones: null,
+  gestion_count: 0,
   created_by_user_id: 'user-uuid-123',
   created_at: new Date('2024-06-15T10:30:00'),
   updated_at: new Date('2024-06-15T11:00:00'),
@@ -115,7 +118,7 @@ describe('GET /api/student-requests/export', () => {
 
     // Header row should have semicolons
     const headerLine = lines[0].replace('\uFEFF', '');
-    expect(headerLine.split(';').length).toBe(21); // 21 columns
+    expect(headerLine.split(';').length).toBe(22); // 22 columns
   });
 
   it('should include correct Spanish headers', async () => {
@@ -127,7 +130,7 @@ describe('GET /api/student-requests/export', () => {
     const headerLine = text.replace('\uFEFF', '').split('\n')[0];
 
     const expectedHeaders = [
-      'ID registro', 'Fecha solicitud', 'ID estudiante', 'Nombres',
+      'N° Radicado', 'ID registro', 'Fecha solicitud', 'ID estudiante', 'Nombres',
       'Apellidos', 'Correo', 'Celular', 'Programa', 'Modalidad',
       'Tipo solicitud', 'Solicitud académica', 'Solicitud financiera',
       'Descripción solicitud', 'Requiere escalar', 'Área a escalar',
@@ -208,10 +211,10 @@ describe('GET /api/student-requests/export', () => {
     const lines = text.split('\n');
     const fields = lines[1].split(';');
 
-    // solicitud_academica (index 10), solicitud_financiera (index 11), area_escalar (index 14)
-    expect(fields[10]).toBe('');
+    // solicitud_academica (index 11), solicitud_financiera (index 12), area_escalar (index 15)
     expect(fields[11]).toBe('');
-    expect(fields[14]).toBe('');
+    expect(fields[12]).toBe('');
+    expect(fields[15]).toBe('');
   });
 
   it('should format fecha_solicitud as YYYY-MM-DD', async () => {
@@ -223,8 +226,8 @@ describe('GET /api/student-requests/export', () => {
     const lines = text.split('\n');
     const fields = lines[1].split(';');
 
-    // fecha_solicitud is index 1
-    expect(fields[1]).toBe('2024-06-15');
+    // fecha_solicitud is index 2
+    expect(fields[2]).toBe('2024-06-15');
   });
 
   it('should format created_at and updated_at as YYYY-MM-DD HH:mm', async () => {
@@ -236,9 +239,9 @@ describe('GET /api/student-requests/export', () => {
     const lines = text.split('\n');
     const fields = lines[1].split(';');
 
-    // created_at is index 19, updated_at is index 20
-    expect(fields[19]).toBe('2024-06-15 10:30');
-    expect(fields[20]).toBe('2024-06-15 11:00');
+    // created_at is index 20, updated_at is index 21
+    expect(fields[20]).toBe('2024-06-15 10:30');
+    expect(fields[21]).toBe('2024-06-15 11:00');
   });
 
   it('should pass filters to prisma query', async () => {
