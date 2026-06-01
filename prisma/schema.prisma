@@ -85,6 +85,7 @@ model StudentRequest {
   area_escalar           String?        @db.VarChar(50)
   estado_solicitud       EstadoSolicitud @default(Radicada)
   estado_solicitud_fecha DateTime       @default(now())
+  alerta_vencimiento_enviada Boolean   @default(false)
   observaciones          String?        @db.VarChar(1200)
   gestion_count          Int            @default(0)
   created_by_user_id     String         @db.Uuid

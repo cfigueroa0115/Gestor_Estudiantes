@@ -28,6 +28,9 @@ const CSV_CONFIG = {
     'Área a escalar',
     'Estado actual',
     'Fecha estado',
+    'Semáforo',
+    'Días en estado',
+    'Alerta vencimiento enviada',
     'Usuario creador',
     'Cargo creador',
     'Fecha creación',
@@ -43,6 +46,39 @@ const TIPO_SOLICITUD_DISPLAY: Record<TipoSolicitud, string> = {
   [TipoSolicitud.Financiero]: 'Financiero',
   [TipoSolicitud.Certificados]: 'Certificados',
 };
+
+/**
+ * Calculate semaphore status for a request based on time thresholds.
+ */
+function getSemaforoLabel(estado: string, estadoFecha: Date): string {
+  const now = new Date();
+  const diffDays = (now.getTime() - estadoFecha.getTime()) / (1000 * 60 * 60 * 24);
+
+  switch (estado) {
+    case 'Radicada':
+      if (diffDays > 1) return 'Vencida';
+      return 'Normal';
+    case 'EnProgreso':
+      if (diffDays > 2) return 'Vencida';
+      if (diffDays > 1) return 'En riesgo';
+      return 'Normal';
+    case 'Escalada':
+      if (diffDays > 5) return 'Vencida';
+      if (diffDays > 3) return 'En riesgo';
+      return 'Normal';
+    default:
+      return 'Normal';
+  }
+}
+
+/**
+ * Calculate days in current state.
+ */
+function getDiasEnEstado(estadoFecha: Date): string {
+  const now = new Date();
+  const diffDays = (now.getTime() - estadoFecha.getTime()) / (1000 * 60 * 60 * 24);
+  return diffDays.toFixed(1);
+}
 
 /**
  * Mapping from filter string values to Prisma TipoSolicitud enum keys.
@@ -213,6 +249,9 @@ export async function GET(request: NextRequest) {
         record.area_escalar ?? '',
         record.estado_solicitud,
         formatDateTime(record.estado_solicitud_fecha),
+        getSemaforoLabel(record.estado_solicitud, record.estado_solicitud_fecha),
+        getDiasEnEstado(record.estado_solicitud_fecha),
+        record.alerta_vencimiento_enviada ? 'Sí' : 'No',
         record.creator.usuario,
         record.creator.cargo,
         formatDateTime(record.created_at),

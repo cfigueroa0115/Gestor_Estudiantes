@@ -54,6 +54,7 @@ CREATE TABLE "student_requests" (
     "area_escalar" VARCHAR(50),
     "estado_solicitud" "EstadoSolicitud" NOT NULL DEFAULT 'Radicada',
     "estado_solicitud_fecha" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "alerta_vencimiento_enviada" BOOLEAN NOT NULL DEFAULT false,
     "observaciones" VARCHAR(1200),
     "gestion_count" INTEGER NOT NULL DEFAULT 0,
     "created_by_user_id" UUID NOT NULL,

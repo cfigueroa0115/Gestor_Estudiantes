@@ -20,11 +20,37 @@ interface StudentRequestRecord {
   requiere_escalar: boolean;
   area_escalar: string | null;
   estado_solicitud: string;
+  estado_solicitud_fecha?: string;
   created_at: string;
   creator: {
     usuario: string;
     cargo: Cargo;
   };
+}
+
+type SemaforoStatus = 'normal' | 'riesgo' | 'vencida';
+
+/** Comprehensive traffic light (semaphore) system for request status */
+function getSemaforoStatus(request: StudentRequestRecord): SemaforoStatus {
+  const estadoDate = new Date(request.estado_solicitud_fecha || request.created_at);
+  const now = new Date();
+  const diffDays = (now.getTime() - estadoDate.getTime()) / (1000 * 60 * 60 * 24);
+
+  switch (request.estado_solicitud) {
+    case 'Radicada':
+      if (diffDays > 1) return 'vencida';
+      return 'normal';
+    case 'EnProgreso':
+      if (diffDays > 2) return 'vencida';
+      if (diffDays > 1) return 'riesgo';
+      return 'normal';
+    case 'Escalada':
+      if (diffDays > 5) return 'vencida';
+      if (diffDays > 3) return 'riesgo';
+      return 'normal';
+    default:
+      return 'normal';
+  }
 }
 
 interface RequestTableProps {
@@ -240,12 +266,22 @@ export function RequestTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-gris-100">
-            {requests.map((request) => (
-              <tr key={request.id} className="transition-colors hover:bg-gris-50">
+            {requests.map((request) => {
+              const semaforo = getSemaforoStatus(request);
+              return (
+              <tr key={request.id} className={`transition-colors ${
+                semaforo === 'vencida' ? 'bg-red-50 hover:bg-red-100' :
+                semaforo === 'riesgo' ? 'bg-yellow-50 hover:bg-yellow-100' :
+                'hover:bg-gris-50'
+              }`}>
                 {COLUMNS.map((col) => (
                   <td
                     key={col.key}
-                    className="whitespace-nowrap px-3 py-2.5 text-gris-700"
+                    className={`whitespace-nowrap px-3 py-2.5 ${
+                      semaforo === 'vencida' ? 'text-red-800' :
+                      semaforo === 'riesgo' ? 'text-yellow-800' :
+                      'text-gris-700'
+                    }`}
                     title={getCellValue(request, col.key)}
                   >
                     {col.key === 'descripcion_solicitud' ? (
@@ -253,6 +289,17 @@ export function RequestTable({
                         {getCellValue(request, col.key)}
                       </span>
                     ) : col.key === 'estado_solicitud' ? (
+                      semaforo === 'vencida' ? (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-bold text-red-800">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+                          Vencida
+                        </span>
+                      ) : semaforo === 'riesgo' ? (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-bold text-yellow-800">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 10 2 0V6zm-1 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" /></svg>
+                          En riesgo
+                        </span>
+                      ) : (
                       <span
                         className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
                           request.estado_solicitud === 'Escalada'
@@ -262,13 +309,15 @@ export function RequestTable({
                       >
                         {request.estado_solicitud || 'Radicada'}
                       </span>
+                      )
                     ) : (
                       getCellValue(request, col.key)
                     )}
                   </td>
                 ))}
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>
