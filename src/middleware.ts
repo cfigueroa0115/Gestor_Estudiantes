@@ -73,6 +73,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.json({ error: 'Operacion no permitida' }, { status: 403 });
   }
 
+  // SECURITY: Block common bot/scraper user agents
+  const ua = request.headers.get('user-agent') || '';
+  const blockedBots = ['scrapy', 'python-requests', 'curl', 'wget', 'httpclient', 'selenium', 'puppeteer', 'playwright', 'phantomjs'];
+  const isBot = blockedBots.some(bot => ua.toLowerCase().includes(bot));
+  if (isBot && !pathname.startsWith('/api/auth')) {
+    return NextResponse.json({ error: 'Acceso no autorizado' }, { status: 403 });
+  }
+
   // Allow public routes through without any checks
   if (isPublicRoute(pathname)) {
     return NextResponse.next();
