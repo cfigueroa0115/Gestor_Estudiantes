@@ -5,7 +5,9 @@ import { Cargo, Estado } from '@/types';
 interface UserRecord {
   id: string;
   usuario: string;
+  nombre: string | null;
   cargo: Cargo;
+  organizacion: string | null;
   estado: Estado;
   created_at: string;
   last_login_at: string | null;
@@ -54,10 +56,12 @@ export function UserTable({
           <thead className="border-b border-gris-200 bg-gris-50">
             <tr>
               <th className="px-4 py-3 font-medium text-gris-700">Usuario</th>
+              <th className="px-4 py-3 font-medium text-gris-700">Nombre</th>
               <th className="px-4 py-3 font-medium text-gris-700">Cargo</th>
+              <th className="px-4 py-3 font-medium text-gris-700">Organizaci&oacute;n</th>
               <th className="px-4 py-3 font-medium text-gris-700">Estado</th>
               <th className="px-4 py-3 font-medium text-gris-700">Creado</th>
-              <th className="px-4 py-3 font-medium text-gris-700">Último acceso</th>
+              <th className="px-4 py-3 font-medium text-gris-700">&Uacute;ltimo acceso</th>
               <th className="px-4 py-3 font-medium text-gris-700">Acciones</th>
             </tr>
           </thead>
@@ -67,7 +71,9 @@ export function UserTable({
                 <td className="px-4 py-3 font-medium text-gris-900">
                   {user.usuario}
                 </td>
+                <td className="px-4 py-3 text-gris-700">{user.nombre || ''}</td>
                 <td className="px-4 py-3 text-gris-700">{user.cargo}</td>
+                <td className="px-4 py-3 text-gris-700">{user.organizacion || ''}</td>
                 <td className="px-4 py-3">
                   <span
                     className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${

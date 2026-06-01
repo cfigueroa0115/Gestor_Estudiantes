@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Cargo } from '@/types';
 
 interface DashboardHeaderProps {
-  user: { usuario: string; cargo: Cargo };
+  user: { usuario: string; nombre: string | null; cargo: Cargo };
   onLogout: () => void;
 }
 
@@ -41,7 +41,7 @@ export function DashboardHeader({ user, onLogout }: DashboardHeaderProps) {
 
           {/* Info usuario */}
           <div className="hidden text-right sm:block">
-            <p className="text-sm font-medium text-gris-800">{user.usuario}</p>
+            <p className="text-sm font-medium text-gris-800">{user.nombre || user.usuario}</p>
             <div className="flex items-center justify-end gap-1.5">
               <span className="inline-block h-2 w-2 rounded-full bg-green-500"></span>
               <p className="text-xs text-gris-500">{user.cargo} &middot; En l&iacute;nea</p>

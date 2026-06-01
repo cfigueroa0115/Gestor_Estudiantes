@@ -64,7 +64,9 @@ export async function GET(request: NextRequest) {
       select: {
         id: true,
         usuario: true,
+        nombre: true,
         cargo: true,
+        organizacion: true,
         estado: true,
         created_at: true,
         updated_at: true,

@@ -9,6 +9,7 @@ import { Cargo } from '@/types';
 
 interface UserData {
   usuario: string;
+  nombre: string | null;
   cargo: Cargo;
 }
 
@@ -30,7 +31,7 @@ export default function DashboardLayout({
           return;
         }
         const data = await res.json();
-        setUser({ usuario: data.usuario, cargo: data.cargo });
+        setUser({ usuario: data.usuario, nombre: data.nombre, cargo: data.cargo });
       } catch {
         router.replace('/');
       } finally {

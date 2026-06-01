@@ -17,8 +17,10 @@ CREATE TYPE "EstadoSolicitud" AS ENUM ('Radicada', 'Escalada', 'En progreso', 'C
 CREATE TABLE "users" (
     "id" UUID NOT NULL,
     "usuario" VARCHAR(20) NOT NULL,
+    "nombre" VARCHAR(100),
     "password_hash" TEXT NOT NULL,
     "cargo" "Cargo" NOT NULL,
+    "organizacion" VARCHAR(20),
     "estado" "Estado" NOT NULL DEFAULT 'Activo',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,

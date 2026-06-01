@@ -15,7 +15,9 @@ import { Cargo, Estado } from '@/types';
 interface UserRecord {
   id: string;
   usuario: string;
+  nombre: string | null;
   cargo: Cargo;
+  organizacion: string | null;
   estado: Estado;
   created_at: string;
   last_login_at: string | null;

@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     // Fetch user from DB to get current estado
     const user = await prisma.user.findUnique({
       where: { id: session.id },
-      select: { id: true, usuario: true, cargo: true, estado: true },
+      select: { id: true, usuario: true, nombre: true, cargo: true, estado: true },
     });
 
     if (!user) {
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { id: user.id, usuario: user.usuario, cargo: user.cargo, estado: user.estado },
+      { id: user.id, usuario: user.usuario, nombre: user.nombre, cargo: user.cargo, estado: user.estado },
       { status: 200 }
     );
   } catch {
