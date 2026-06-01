@@ -123,11 +123,11 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
     );
   }
 
-  // Auto-lookup student by ID
-  const handleIdEstudianteBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+  // Auto-lookup student by ID - triggers on every change (dynamic)
+  const handleIdEstudianteChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = e.target.value;
+    setValue('id_estudiante', id);
     if (!id || id.length < 3) {
-      // Clear fields when ID is empty or too short
       setValue('nombres', '');
       setValue('apellidos', '');
       setValue('correo', '');
@@ -143,6 +143,10 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
       if (result.celular) setValue('celular', result.celular);
       setStudentFound(true);
     } else {
+      setValue('nombres', '');
+      setValue('apellidos', '');
+      setValue('correo', '');
+      setValue('celular', '');
       setStudentFound(false);
     }
   };
@@ -171,7 +175,7 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
               </div>
               <div>
                 <label htmlFor="id_estudiante" className="mb-1 block text-sm font-medium text-gris-700">ID Estudiante</label>
-                <input id="id_estudiante" type="text" inputMode="numeric" maxLength={10} placeholder="Máximo 10 dígitos" className={inputClass(!!errors.id_estudiante)} {...register('id_estudiante')} disabled={isSubmitting} onBlur={handleIdEstudianteBlur} />
+                <input id="id_estudiante" type="text" inputMode="numeric" maxLength={10} placeholder="Máximo 10 dígitos" className={inputClass(!!errors.id_estudiante)} {...register('id_estudiante')} disabled={isSubmitting} onChange={handleIdEstudianteChange} />
                 {errors.id_estudiante && <p className="mt-1 text-xs text-red-600">{errors.id_estudiante.message}</p>}
               </div>
               <div>

@@ -47,8 +47,9 @@ export default function AutogestionPage() {
   const descripcion = watch('descripcion_solicitud') || '';
   const caracteresRestantes = 1200 - descripcion.length;
 
-  const handleIdEstudianteBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleIdEstudianteChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = e.target.value;
+    setValue('id_estudiante', id);
     if (!id || id.length < 3) {
       setValue('nombres', '');
       setValue('apellidos', '');
@@ -65,6 +66,10 @@ export default function AutogestionPage() {
       if (result.celular) setValue('celular', result.celular);
       setStudentFound(true);
     } else {
+      setValue('nombres', '');
+      setValue('apellidos', '');
+      setValue('correo', '');
+      setValue('celular', '');
       setStudentFound(false);
     }
   };
@@ -154,7 +159,7 @@ export default function AutogestionPage() {
                 </div>
                 <div>
                   <label htmlFor="id_estudiante" className="mb-1 block text-sm font-medium text-gris-700">ID Estudiante</label>
-                  <input id="id_estudiante" type="text" inputMode="numeric" maxLength={10} placeholder="Máximo 10 dígitos" className={inputClass(!!errors.id_estudiante)} {...register('id_estudiante')} disabled={isSubmitting} onBlur={handleIdEstudianteBlur} />
+                  <input id="id_estudiante" type="text" inputMode="numeric" maxLength={10} placeholder="Máximo 10 dígitos" className={inputClass(!!errors.id_estudiante)} {...register('id_estudiante')} disabled={isSubmitting} onChange={handleIdEstudianteChange} />
                   {errors.id_estudiante && <p className="mt-1 text-xs text-red-600">{errors.id_estudiante.message}</p>}
                 </div>
                 <div>
