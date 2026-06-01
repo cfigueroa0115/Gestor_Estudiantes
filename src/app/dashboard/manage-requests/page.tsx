@@ -28,6 +28,7 @@ interface StudentRequestRecord {
   requiere_escalar: boolean;
   area_escalar: string | null;
   estado_solicitud: string;
+  estado_solicitud_fecha: string;
   gestion_count: number;
   created_at: string;
   creator: {
@@ -68,6 +69,16 @@ function formatDateTime(dateStr: string | null): string {
 function renderNullable(value: string | null | undefined): string {
   if (value === null || value === undefined) return '';
   return value;
+}
+
+/** Check if a Radicada request has exceeded 1 day */
+function isExpired(request: StudentRequestRecord): boolean {
+  if (request.estado_solicitud !== 'Radicada') return false;
+  const estadoDate = new Date(request.estado_solicitud_fecha || request.created_at);
+  const now = new Date();
+  const diffMs = now.getTime() - estadoDate.getTime();
+  const diffDays = diffMs / (1000 * 60 * 60 * 24);
+  return diffDays > 1;
 }
 
 interface ColumnDef {
@@ -338,12 +349,14 @@ export default function ManageRequestsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gris-100">
-                {requests.map((request) => (
-                  <tr key={request.id} className="transition-colors hover:bg-gris-50">
+                {requests.map((request) => {
+                  const expired = isExpired(request);
+                  return (
+                  <tr key={request.id} className={`transition-colors ${expired ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-gris-50'}`}>
                     {COLUMNS.map((col) => (
                       <td
                         key={col.key}
-                        className="whitespace-nowrap px-3 py-2.5 text-gris-700"
+                        className={`whitespace-nowrap px-3 py-2.5 ${expired ? 'text-red-800' : 'text-gris-700'}`}
                         title={col.key !== 'accion' ? getCellValue(request, col.key) : undefined}
                       >
                         {col.key === 'accion' ? (
@@ -370,6 +383,12 @@ export default function ManageRequestsPage() {
                             {getCellValue(request, col.key)}
                           </span>
                         ) : col.key === 'estado_solicitud' ? (
+                          expired ? (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-bold text-red-800">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+                              Vencida
+                            </span>
+                          ) : (
                           <span
                             className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
                               request.estado_solicitud === 'Escalada'
@@ -385,13 +404,15 @@ export default function ManageRequestsPage() {
                               ? 'En progreso'
                               : request.estado_solicitud || 'Radicada'}
                           </span>
+                          )
                         ) : (
                           getCellValue(request, col.key)
                         )}
                       </td>
                     ))}
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>
