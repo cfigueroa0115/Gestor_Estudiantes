@@ -28,6 +28,14 @@ const TIPO_LABELS: Record<string, string> = {
   Certificados: 'Certificados',
 };
 
+interface SemaforoItem {
+  numero_radicado: string;
+  fecha_solicitud: string;
+  id_estudiante: string;
+  nombres: string;
+  apellidos: string;
+}
+
 interface Stats {
   total: number;
   estadoCounts: Record<string, number>;
@@ -37,12 +45,14 @@ interface Stats {
   perDay: Record<string, number>;
   escaladas: number;
   semaforo: { aTiempo: number; enRiesgo: number; vencida: number };
+  semaforoItems: { aTiempo: SemaforoItem[]; enRiesgo: SemaforoItem[]; vencida: SemaforoItem[] };
 }
 
 export default function AnalyticsPage() {
   const router = useRouter();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [popupType, setPopupType] = useState<'aTiempo' | 'enRiesgo' | 'vencida' | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const fetchStats = useCallback(async () => {
@@ -121,7 +131,7 @@ export default function AnalyticsPage() {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* KPI Semaphore Cards */}
           <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-3 rounded-xl border border-green-200 bg-green-50 p-4">
+            <div className="flex items-center gap-3 rounded-xl border border-green-200 bg-green-50 p-4 cursor-pointer hover:bg-green-100 transition-colors" onClick={() => setPopupType('aTiempo')}>
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-500">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
               </div>
@@ -130,7 +140,7 @@ export default function AnalyticsPage() {
                 <p className="text-sm font-medium text-green-700">A tiempo</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 rounded-xl border border-yellow-200 bg-yellow-50 p-4">
+            <div className="flex items-center gap-3 rounded-xl border border-yellow-200 bg-yellow-50 p-4 cursor-pointer hover:bg-yellow-100 transition-colors" onClick={() => setPopupType('enRiesgo')}>
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-yellow-500 animate-[glow-yellow_2s_ease-in-out_infinite]">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 102 0V6zm-1 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" /></svg>
               </div>
@@ -139,7 +149,7 @@ export default function AnalyticsPage() {
                 <p className="text-sm font-medium text-yellow-700">En riesgo</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 p-4">
+            <div className="flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 p-4 cursor-pointer hover:bg-red-100 transition-colors" onClick={() => setPopupType('vencida')}>
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-500 animate-[glow-red_1.5s_ease-in-out_infinite]">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
               </div>
@@ -164,7 +174,7 @@ export default function AnalyticsPage() {
                   innerRadius={60} outerRadius={110}
                   dataKey="value"
                   label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
-                  labelLine={false}
+                  labelLine={true}
                   strokeWidth={3}
                   stroke="#fff"
                 >
@@ -261,6 +271,38 @@ export default function AnalyticsPage() {
           )}
         </div>
       </div>
+
+      {/* Popup de detalle de semaforización */}
+      {popupType && stats.semaforoItems && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setPopupType(null)}>
+          <div className="max-h-[80vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className={`text-lg font-bold ${popupType === 'vencida' ? 'text-red-800' : popupType === 'enRiesgo' ? 'text-yellow-800' : 'text-green-800'}`}>
+                {popupType === 'aTiempo' ? 'Solicitudes A tiempo' : popupType === 'enRiesgo' ? 'Solicitudes En riesgo' : 'Solicitudes Vencidas'}
+              </h3>
+              <button onClick={() => setPopupType(null)} className="rounded p-1 text-gris-500 hover:bg-gris-100">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
+              </button>
+            </div>
+            <p className="mb-3 text-xs text-gris-500">Haz clic en un registro para ir a Gestionar solicitudes</p>
+            <div className="divide-y divide-gris-100">
+              {(stats.semaforoItems[popupType] || []).map((item) => (
+                <button key={item.numero_radicado} onClick={() => router.push(`/dashboard/manage-requests?search=${item.numero_radicado}`)} className="flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-gris-50 rounded-lg">
+                  <div className={`h-3 w-3 rounded-full ${popupType === 'vencida' ? 'bg-red-500' : popupType === 'enRiesgo' ? 'bg-yellow-500' : 'bg-green-500'}`}></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gris-900">{item.numero_radicado}</p>
+                    <p className="text-xs text-gris-500">{item.nombres} {item.apellidos} &middot; ID: {item.id_estudiante}</p>
+                  </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gris-400" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" /></svg>
+                </button>
+              ))}
+              {(stats.semaforoItems[popupType] || []).length === 0 && (
+                <p className="py-4 text-center text-sm text-gris-500">No hay solicitudes en esta categor&iacute;a</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

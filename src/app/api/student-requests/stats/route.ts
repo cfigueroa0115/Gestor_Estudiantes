@@ -26,6 +26,11 @@ export async function GET() {
         area_escalar: true,
         created_at: true,
         estado_solicitud_fecha: true,
+        numero_radicado: true,
+        fecha_solicitud: true,
+        id_estudiante: true,
+        nombres: true,
+        apellidos: true,
       },
     });
 
@@ -67,17 +72,24 @@ export async function GET() {
     // Semaphore counts
     const now = new Date();
     let aTiempo = 0, enRiesgo = 0, vencida = 0;
+    interface SemaforoItem { numero_radicado: string; fecha_solicitud: Date; id_estudiante: string; nombres: string; apellidos: string; semaforo: string; }
+    const semaforoItems: { aTiempo: SemaforoItem[]; enRiesgo: SemaforoItem[]; vencida: SemaforoItem[] } = { aTiempo: [], enRiesgo: [], vencida: [] };
+
     allRequests.forEach((r) => {
       const estadoDate = new Date(r.estado_solicitud_fecha || r.created_at);
       const diffDays = (now.getTime() - estadoDate.getTime()) / (1000 * 60 * 60 * 24);
       const estado = r.estado_solicitud || 'Radicada';
-      if (estado === 'Cerrada') { aTiempo++; return; }
-      if (estado === 'Radicada' && diffDays > 1) { vencida++; return; }
-      if (estado === 'EnProgreso' && diffDays > 2) { vencida++; return; }
-      if (estado === 'EnProgreso' && diffDays > 1) { enRiesgo++; return; }
-      if (estado === 'Escalada' && diffDays > 5) { vencida++; return; }
-      if (estado === 'Escalada' && diffDays > 3) { enRiesgo++; return; }
-      aTiempo++;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const item = r as any;
+      const sItem: SemaforoItem = { numero_radicado: item.numero_radicado || '', fecha_solicitud: item.fecha_solicitud || r.created_at, id_estudiante: item.id_estudiante || '', nombres: item.nombres || '', apellidos: item.apellidos || '', semaforo: '' };
+
+      if (estado === 'Cerrada') { aTiempo++; sItem.semaforo = 'aTiempo'; semaforoItems.aTiempo.push(sItem); return; }
+      if (estado === 'Radicada' && diffDays > 1) { vencida++; sItem.semaforo = 'vencida'; semaforoItems.vencida.push(sItem); return; }
+      if (estado === 'EnProgreso' && diffDays > 2) { vencida++; sItem.semaforo = 'vencida'; semaforoItems.vencida.push(sItem); return; }
+      if (estado === 'EnProgreso' && diffDays > 1) { enRiesgo++; sItem.semaforo = 'enRiesgo'; semaforoItems.enRiesgo.push(sItem); return; }
+      if (estado === 'Escalada' && diffDays > 5) { vencida++; sItem.semaforo = 'vencida'; semaforoItems.vencida.push(sItem); return; }
+      if (estado === 'Escalada' && diffDays > 3) { enRiesgo++; sItem.semaforo = 'enRiesgo'; semaforoItems.enRiesgo.push(sItem); return; }
+      aTiempo++; sItem.semaforo = 'aTiempo'; semaforoItems.aTiempo.push(sItem);
     });
 
     return NextResponse.json({
@@ -89,6 +101,7 @@ export async function GET() {
       perDay,
       escaladas: allRequests.filter((r) => r.requiere_escalar).length,
       semaforo: { aTiempo, enRiesgo, vencida },
+      semaforoItems,
     });
   } catch {
     return NextResponse.json(
