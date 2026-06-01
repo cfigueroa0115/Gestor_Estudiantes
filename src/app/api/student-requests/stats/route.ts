@@ -64,6 +64,22 @@ export async function GET() {
       perDay[day] = (perDay[day] || 0) + 1;
     });
 
+    // Semaphore counts
+    const now = new Date();
+    let aTiempo = 0, enRiesgo = 0, vencida = 0;
+    allRequests.forEach((r) => {
+      const estadoDate = new Date(r.estado_solicitud_fecha || r.created_at);
+      const diffDays = (now.getTime() - estadoDate.getTime()) / (1000 * 60 * 60 * 24);
+      const estado = r.estado_solicitud || 'Radicada';
+      if (estado === 'Cerrada') { aTiempo++; return; }
+      if (estado === 'Radicada' && diffDays > 1) { vencida++; return; }
+      if (estado === 'EnProgreso' && diffDays > 2) { vencida++; return; }
+      if (estado === 'EnProgreso' && diffDays > 1) { enRiesgo++; return; }
+      if (estado === 'Escalada' && diffDays > 5) { vencida++; return; }
+      if (estado === 'Escalada' && diffDays > 3) { enRiesgo++; return; }
+      aTiempo++;
+    });
+
     return NextResponse.json({
       total: allRequests.length,
       estadoCounts,
@@ -72,6 +88,7 @@ export async function GET() {
       areaCounts,
       perDay,
       escaladas: allRequests.filter((r) => r.requiere_escalar).length,
+      semaforo: { aTiempo, enRiesgo, vencida },
     });
   } catch {
     return NextResponse.json(
