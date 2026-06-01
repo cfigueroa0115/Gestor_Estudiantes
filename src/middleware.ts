@@ -6,7 +6,7 @@ import type { Cargo } from '@/types';
 
 const PRIVATE_ROUTES = ['/dashboard', '/dashboard/users', '/dashboard/requests'];
 const PRIVATE_API_ROUTES = ['/api/users', '/api/student-requests'];
-const PUBLIC_ROUTES = ['/', '/api/auth/login'];
+const PUBLIC_ROUTES = ['/', '/api/auth/login', '/autogestion', '/api/autogestion'];
 
 // --- Role-Based Access Configuration (preparation for future restrictions) ---
 
