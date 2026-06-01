@@ -65,11 +65,41 @@ CREATE TABLE "student_requests" (
     CONSTRAINT "student_requests_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "estudiantes" (
+    "id" UUID NOT NULL,
+    "ciclo_lectivo" VARCHAR(10),
+    "codigo_sede" VARCHAR(10),
+    "programa_academico" VARCHAR(10),
+    "horario" VARCHAR(10),
+    "nivel_academico" VARCHAR(10),
+    "tipo_admision" VARCHAR(10),
+    "desc_tipo_admision" VARCHAR(50),
+    "id_estudiante" VARCHAR(20) NOT NULL,
+    "tipo_documento" VARCHAR(10),
+    "nro_documento" VARCHAR(20),
+    "primer_apellido" VARCHAR(50),
+    "segundo_apellido" VARCHAR(50),
+    "apellidos" VARCHAR(100),
+    "primer_nombre" VARCHAR(50),
+    "segundo_nombre" VARCHAR(50),
+    "nombres" VARCHAR(100),
+    "genero" VARCHAR(20),
+    "telefono" VARCHAR(20),
+    "correo" VARCHAR(100),
+    "eps" VARCHAR(100),
+
+    CONSTRAINT "estudiantes_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_usuario_key" ON "users"("usuario");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "student_requests_numero_radicado_key" ON "student_requests"("numero_radicado");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "estudiantes_id_estudiante_key" ON "estudiantes"("id_estudiante");
 
 -- AddForeignKey
 ALTER TABLE "users" ADD CONSTRAINT "users_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;

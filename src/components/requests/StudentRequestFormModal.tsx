@@ -9,6 +9,7 @@ import {
 } from '@/lib/validations/student-request.schema';
 import { useToast } from '@/components/shared/Toast';
 import { Button } from '@/components/ui/button';
+import { lookupStudent } from '@/lib/use-student-lookup';
 
 interface StudentRequestFormModalProps {
   isOpen: boolean;
@@ -121,6 +122,20 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
     );
   }
 
+  // Auto-lookup student by ID
+  const handleIdEstudianteBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+    const id = e.target.value;
+    if (id.length >= 3) {
+      const result = await lookupStudent(id);
+      if (result) {
+        if (result.nombres) setValue('nombres', result.nombres);
+        if (result.apellidos) setValue('apellidos', result.apellidos);
+        if (result.correo) setValue('correo', result.correo);
+        if (result.celular) setValue('celular', result.celular);
+      }
+    }
+  };
+
   if (!isOpen) return null;
 
   const inputClass = (hasError: boolean) =>
@@ -145,7 +160,7 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
               </div>
               <div>
                 <label htmlFor="id_estudiante" className="mb-1 block text-sm font-medium text-gris-700">ID Estudiante</label>
-                <input id="id_estudiante" type="text" inputMode="numeric" maxLength={10} placeholder="Máximo 10 dígitos" className={inputClass(!!errors.id_estudiante)} {...register('id_estudiante')} disabled={isSubmitting} />
+                <input id="id_estudiante" type="text" inputMode="numeric" maxLength={10} placeholder="Máximo 10 dígitos" className={inputClass(!!errors.id_estudiante)} {...register('id_estudiante')} disabled={isSubmitting} onBlur={handleIdEstudianteBlur} />
                 {errors.id_estudiante && <p className="mt-1 text-xs text-red-600">{errors.id_estudiante.message}</p>}
               </div>
               <div>

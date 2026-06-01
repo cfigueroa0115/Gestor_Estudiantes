@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
+import { lookupStudent } from '@/lib/use-student-lookup';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   studentRequestSchema,
@@ -44,6 +45,19 @@ export default function AutogestionPage() {
   const requiereEscalar = watch('requiere_escalar');
   const descripcion = watch('descripcion_solicitud') || '';
   const caracteresRestantes = 1200 - descripcion.length;
+
+  const handleIdEstudianteBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+    const id = e.target.value;
+    if (id.length >= 3) {
+      const result = await lookupStudent(id);
+      if (result) {
+        if (result.nombres) setValue('nombres', result.nombres);
+        if (result.apellidos) setValue('apellidos', result.apellidos);
+        if (result.correo) setValue('correo', result.correo);
+        if (result.celular) setValue('celular', result.celular);
+      }
+    }
+  };
 
   const inputClass = (hasError: boolean) =>
     `w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:border-aguamarina-500 focus:ring-1 focus:ring-aguamarina-500 ${hasError ? 'border-red-500' : 'border-gris-300'}`;
@@ -130,7 +144,7 @@ export default function AutogestionPage() {
                 </div>
                 <div>
                   <label htmlFor="id_estudiante" className="mb-1 block text-sm font-medium text-gris-700">ID Estudiante</label>
-                  <input id="id_estudiante" type="text" inputMode="numeric" maxLength={10} placeholder="Máximo 10 dígitos" className={inputClass(!!errors.id_estudiante)} {...register('id_estudiante')} disabled={isSubmitting} />
+                  <input id="id_estudiante" type="text" inputMode="numeric" maxLength={10} placeholder="Máximo 10 dígitos" className={inputClass(!!errors.id_estudiante)} {...register('id_estudiante')} disabled={isSubmitting} onBlur={handleIdEstudianteBlur} />
                   {errors.id_estudiante && <p className="mt-1 text-xs text-red-600">{errors.id_estudiante.message}</p>}
                 </div>
                 <div>

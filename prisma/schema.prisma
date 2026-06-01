@@ -99,3 +99,29 @@ model StudentRequest {
 
   @@map("student_requests")
 }
+
+model Estudiante {
+  id                String   @id @default(uuid()) @db.Uuid
+  ciclo_lectivo     String?  @db.VarChar(10)
+  codigo_sede       String?  @db.VarChar(10)
+  programa_academico String? @db.VarChar(10)
+  horario           String?  @db.VarChar(10)
+  nivel_academico   String?  @db.VarChar(10)
+  tipo_admision     String?  @db.VarChar(10)
+  desc_tipo_admision String? @db.VarChar(50)
+  id_estudiante     String   @unique @db.VarChar(20)
+  tipo_documento    String?  @db.VarChar(10)
+  nro_documento     String?  @db.VarChar(20)
+  primer_apellido   String?  @db.VarChar(50)
+  segundo_apellido  String?  @db.VarChar(50)
+  apellidos         String?  @db.VarChar(100)
+  primer_nombre     String?  @db.VarChar(50)
+  segundo_nombre    String?  @db.VarChar(50)
+  nombres           String?  @db.VarChar(100)
+  genero            String?  @db.VarChar(20)
+  telefono          String?  @db.VarChar(20)
+  correo            String?  @db.VarChar(100)
+  eps               String?  @db.VarChar(100)
+
+  @@map("estudiantes")
+}
