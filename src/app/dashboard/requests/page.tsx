@@ -40,6 +40,14 @@ export default function RequestsPage() {
   const { showToast } = useToast();
   const router = useRouter();
 
+  // Admin check
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => {
+    fetch('/api/auth/me').then(r => r.ok ? r.json() : null).then(data => {
+      if (data) setIsAdmin(['1129564302', '52317897'].includes(data.usuario));
+    }).catch(() => {});
+  }, []);
+
   // Data state
   const [requests, setRequests] = useState<StudentRequestRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -185,7 +193,8 @@ export default function RequestsPage() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {/* Export CSV button */}
+          {/* Export CSV button - solo admins */}
+          {isAdmin && (
           <button
             onClick={handleExport}
             className="inline-flex items-center gap-2 rounded-lg border border-gris-300 bg-white px-4 py-2.5 text-sm font-medium text-gris-700 shadow-sm transition-colors hover:bg-gris-50 focus:outline-none focus:ring-2 focus:ring-aguamarina-500 focus:ring-offset-2"
@@ -208,6 +217,7 @@ export default function RequestsPage() {
             </svg>
             Exportar CSV
           </button>
+          )}
 
           {/* New request button */}
           <button
