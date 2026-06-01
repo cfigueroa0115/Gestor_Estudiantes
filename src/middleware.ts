@@ -68,6 +68,11 @@ function getRoutePermission(pathname: string): RoutePermission | undefined {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // SECURITY: Block all DELETE requests on data APIs (prevent data destruction)
+  if (request.method === 'DELETE') {
+    return NextResponse.json({ error: 'Operacion no permitida' }, { status: 403 });
+  }
+
   // Allow public routes through without any checks
   if (isPublicRoute(pathname)) {
     return NextResponse.next();
