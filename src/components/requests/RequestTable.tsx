@@ -109,6 +109,7 @@ interface ColumnDef {
 }
 
 const COLUMNS: ColumnDef[] = [
+  { key: 'semaforizacion', label: 'Semaforización', sortable: false, minWidth: '130px' },
   { key: 'numero_radicado', label: 'N° Radicado', sortable: true, minWidth: '150px' },
   { key: 'fecha_solicitud', label: 'Fecha solicitud', sortable: true, minWidth: '120px' },
   { key: 'id_estudiante', label: 'ID Estudiante', sortable: true, minWidth: '110px' },
@@ -125,7 +126,6 @@ const COLUMNS: ColumnDef[] = [
   { key: 'requiere_escalar', label: 'Requiere escalar', sortable: false, minWidth: '120px' },
   { key: 'area_escalar', label: 'Área escalar', sortable: false, minWidth: '110px' },
   { key: 'estado_solicitud', label: 'Estado actual', sortable: false, minWidth: '120px' },
-  { key: 'semaforizacion', label: 'Semaforización', sortable: false, minWidth: '120px' },
   { key: 'creator_usuario', label: 'Usuario creador', sortable: false, minWidth: '120px' },
   { key: 'creator_cargo', label: 'Cargo creador', sortable: false, minWidth: '110px' },
   { key: 'created_at', label: 'Fecha creación', sortable: true, minWidth: '140px' },
@@ -315,7 +315,7 @@ export function RequestTable({
                           En riesgo
                         </span>
                       ) : (
-                        <span className="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">Normal</span>
+                        <span className="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">A tiempo</span>
                       )
                     ) : (
                       getCellValue(request, col.key)
