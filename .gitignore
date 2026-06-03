@@ -37,3 +37,6 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# AuthAdminKit export (proyecto separado, no integrar)
+_AUTH_ADMIN_KIT_EXPORT_DO_NOT_DEPLOY/
