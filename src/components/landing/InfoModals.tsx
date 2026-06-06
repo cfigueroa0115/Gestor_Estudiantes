@@ -111,27 +111,14 @@ export function HeaderInfoButtons() {
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               onClick={(e) => e.stopPropagation()}
-              className="relative max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-3xl shadow-2xl"
+              className="relative max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white shadow-2xl border border-gris-100"
             >
-              {/* Solid white background with subtle gradient accent */}
-              <div className="absolute inset-0 rounded-3xl bg-white" />
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-aguamarina-50/40 via-transparent to-verde-50/40" />
-              {/* AI circuit pattern overlay */}
-              <div className="absolute inset-0 rounded-3xl opacity-[0.02]" style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-              }} />
-              {/* Floating AI particles */}
-              <div className="absolute top-4 left-8 h-2 w-2 rounded-full bg-aguamarina-400/30 animate-pulse" />
-              <div className="absolute top-12 right-12 h-1.5 w-1.5 rounded-full bg-verde-400/40 animate-pulse" />
-              <div className="absolute bottom-16 left-12 h-1 w-1 rounded-full bg-blue-400/30 animate-pulse" />
-              <div className="absolute bottom-8 right-20 h-2.5 w-2.5 rounded-full bg-aguamarina-300/20 animate-pulse" />
-
               {/* Content */}
-              <div className="relative z-10 p-6 md:p-8">
+              <div className="relative p-6 md:p-8">
                 {/* Close button */}
                 <button
                   onClick={() => setOpenModal(null)}
-                  className="absolute right-4 top-4 rounded-full bg-gris-100/80 p-2 text-gris-500 transition-all hover:bg-gris-200 hover:text-gris-700 hover:scale-110"
+                  className="absolute right-4 top-4 z-20 rounded-full bg-gris-100/80 p-2 text-gris-500 transition-all hover:bg-gris-200 hover:text-gris-700 hover:scale-110"
                   aria-label="Cerrar"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
