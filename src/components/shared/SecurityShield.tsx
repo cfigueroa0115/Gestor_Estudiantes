@@ -66,7 +66,8 @@ export function SecurityShield() {
 
     // Detect automation/bot
     const detectBot = () => {
-      const nav = navigator as Record<string, unknown>;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const nav = navigator as any;
       if (nav.webdriver || nav.domAutomation || nav.domAutomationController) {
         document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Arial;"><h1>Acceso no autorizado</h1></div>';
       }
