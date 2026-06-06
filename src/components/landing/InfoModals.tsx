@@ -18,61 +18,50 @@ export function HeaderInfoButtons() {
   return (
     <>
       {/* Buttons in the top-right header area */}
-      <div className="flex flex-wrap items-center gap-2 md:gap-3">
+      <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
         {/* Button: ¿Qué es este portal? */}
         <button
           onClick={() => setOpenModal('portal')}
-          className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-4 py-2 text-xs font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-aguamarina-500/30 md:px-5 md:py-2.5 md:text-sm"
+          className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full px-3 py-1.5 text-[10px] font-semibold text-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-aguamarina-500/30 sm:px-4 sm:py-2 sm:text-xs md:gap-2 md:px-5 md:py-2.5 md:text-sm"
         >
           <span className="absolute inset-0 bg-gradient-to-r from-aguamarina-500 via-verde-500 to-aguamarina-600 transition-all duration-500 group-hover:from-verde-600 group-hover:via-aguamarina-500 group-hover:to-verde-500" />
-          <span className="absolute inset-0 rounded-full border-2 border-white/30 group-hover:border-white/60 transition-all duration-300" />
-          <span className="absolute inset-[-2px] rounded-full bg-gradient-to-r from-white/0 via-white/40 to-white/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500 animate-shimmer" />
+          <span className="absolute inset-0 rounded-full border border-white/30 group-hover:border-white/60 transition-all duration-300" />
           <span className="relative z-10">
-            <svg xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:rotate-12" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10"/>
               <path d="M12 16v-4"/>
               <path d="M12 8h.01"/>
-              <path d="M8 12h.01"/>
-              <path d="M16 12h.01"/>
-              <path d="M9 9h.01"/>
-              <path d="M15 9h.01"/>
-              <path d="M9 15h.01"/>
-              <path d="M15 15h.01"/>
             </svg>
           </span>
-          <span className="relative z-10 hidden sm:inline">¿Qué es este portal?</span>
-          <span className="relative z-10 sm:hidden">Portal</span>
+          <span className="relative z-10">Portal</span>
         </button>
 
         {/* Button: ¿Cuál es su estructura? */}
         <button
           onClick={() => setOpenModal('estructura')}
-          className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-4 py-2 text-xs font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-verde-500/30 md:px-5 md:py-2.5 md:text-sm"
+          className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full px-3 py-1.5 text-[10px] font-semibold text-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-verde-500/30 sm:px-4 sm:py-2 sm:text-xs md:gap-2 md:px-5 md:py-2.5 md:text-sm"
         >
           <span className="absolute inset-0 bg-gradient-to-r from-verde-500 via-emerald-500 to-verde-600 transition-all duration-500 group-hover:from-emerald-600 group-hover:via-verde-500 group-hover:to-emerald-500" />
-          <span className="absolute inset-0 rounded-full border-2 border-white/30 group-hover:border-white/60 transition-all duration-300" />
-          <span className="absolute inset-[-2px] rounded-full bg-gradient-to-r from-white/0 via-white/40 to-white/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500 animate-shimmer" />
+          <span className="absolute inset-0 rounded-full border border-white/30 group-hover:border-white/60 transition-all duration-300" />
           <span className="relative z-10">
-            <svg xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:-rotate-12" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2L2 7l10 5 10-5-10-5z"/>
               <path d="M2 17l10 5 10-5"/>
               <path d="M2 12l10 5 10-5"/>
             </svg>
           </span>
-          <span className="relative z-10 hidden sm:inline">¿Cuál es su estructura?</span>
-          <span className="relative z-10 sm:hidden">Estructura</span>
+          <span className="relative z-10">Estructura</span>
         </button>
 
         {/* Button: Arquitectura del portal */}
         <button
           onClick={() => setOpenModal('arquitectura')}
-          className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-4 py-2 text-xs font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/30 md:px-5 md:py-2.5 md:text-sm"
+          className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full px-3 py-1.5 text-[10px] font-semibold text-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/30 sm:px-4 sm:py-2 sm:text-xs md:gap-2 md:px-5 md:py-2.5 md:text-sm"
         >
           <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 transition-all duration-500 group-hover:from-purple-600 group-hover:via-blue-500 group-hover:to-indigo-500" />
-          <span className="absolute inset-0 rounded-full border-2 border-white/30 group-hover:border-white/60 transition-all duration-300" />
-          <span className="absolute inset-[-2px] rounded-full bg-gradient-to-r from-white/0 via-white/40 to-white/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500 animate-shimmer" />
+          <span className="absolute inset-0 rounded-full border border-white/30 group-hover:border-white/60 transition-all duration-300" />
           <span className="relative z-10">
-            <svg xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:rotate-12" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="2" width="6" height="6" rx="1"/>
               <rect x="16" y="2" width="6" height="6" rx="1"/>
               <rect x="9" y="16" width="6" height="6" rx="1"/>
@@ -80,8 +69,8 @@ export function HeaderInfoButtons() {
               <path d="M12 12v4"/>
             </svg>
           </span>
-          <span className="relative z-10 hidden sm:inline">Arquitectura del portal</span>
-          <span className="relative z-10 sm:hidden">Arquitectura</span>
+          <span className="relative z-10 hidden sm:inline">Arquitectura</span>
+          <span className="relative z-10 sm:hidden">Arq.</span>
         </button>
       </div>
 
