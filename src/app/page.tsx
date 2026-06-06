@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LandingClient } from "@/components/landing/LandingClient";
+import { HeaderInfoButtons } from "@/components/landing/InfoModals";
 
 export default function Home() {
   return (
@@ -24,6 +25,8 @@ export default function Home() {
             priority
           />
         </Link>
+        {/* Info buttons in the header - top right */}
+        <HeaderInfoButtons />
       </header>
 
       {/* Client-side interactive content */}

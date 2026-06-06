@@ -5,27 +5,24 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 type ModalType = 'portal' | 'estructura' | 'arquitectura' | null;
 
-export function InfoPortalButtons() {
+export function HeaderInfoButtons() {
   const [openModal, setOpenModal] = useState<ModalType>(null);
   const shouldReduceMotion = useReducedMotion();
 
   return (
     <>
-      {/* Buttons - positioned right after the login button */}
-      <div className="relative z-10 mt-6 flex flex-wrap items-center justify-center gap-3 px-4">
+      {/* Buttons in the top-right header area */}
+      <div className="flex flex-wrap items-center gap-2 md:gap-3">
         {/* Button: ¿Qué es este portal? */}
         <button
           onClick={() => setOpenModal('portal')}
-          className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full px-6 py-2.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-aguamarina-500/30"
+          className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-4 py-2 text-xs font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-aguamarina-500/30 md:px-5 md:py-2.5 md:text-sm"
         >
-          {/* Animated gradient background */}
           <span className="absolute inset-0 bg-gradient-to-r from-aguamarina-500 via-verde-500 to-aguamarina-600 transition-all duration-500 group-hover:from-verde-600 group-hover:via-aguamarina-500 group-hover:to-verde-500" />
-          {/* Shimmer border effect */}
           <span className="absolute inset-0 rounded-full border-2 border-white/30 group-hover:border-white/60 transition-all duration-300" />
           <span className="absolute inset-[-2px] rounded-full bg-gradient-to-r from-white/0 via-white/40 to-white/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500 animate-shimmer" />
-          {/* Icon - Brain/AI style */}
           <span className="relative z-10">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4.5 w-4.5 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10"/>
               <path d="M12 16v-4"/>
               <path d="M12 8h.01"/>
@@ -37,39 +34,39 @@ export function InfoPortalButtons() {
               <path d="M15 15h.01"/>
             </svg>
           </span>
-          <span className="relative z-10">¿Qué es este portal?</span>
+          <span className="relative z-10 hidden sm:inline">¿Qué es este portal?</span>
+          <span className="relative z-10 sm:hidden">Portal</span>
         </button>
 
         {/* Button: ¿Cuál es su estructura? */}
         <button
           onClick={() => setOpenModal('estructura')}
-          className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full px-6 py-2.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-verde-500/30"
+          className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-4 py-2 text-xs font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-verde-500/30 md:px-5 md:py-2.5 md:text-sm"
         >
           <span className="absolute inset-0 bg-gradient-to-r from-verde-500 via-emerald-500 to-verde-600 transition-all duration-500 group-hover:from-emerald-600 group-hover:via-verde-500 group-hover:to-emerald-500" />
           <span className="absolute inset-0 rounded-full border-2 border-white/30 group-hover:border-white/60 transition-all duration-300" />
           <span className="absolute inset-[-2px] rounded-full bg-gradient-to-r from-white/0 via-white/40 to-white/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500 animate-shimmer" />
-          {/* Icon - Layers/Structure */}
           <span className="relative z-10">
-            <svg xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2L2 7l10 5 10-5-10-5z"/>
               <path d="M2 17l10 5 10-5"/>
               <path d="M2 12l10 5 10-5"/>
             </svg>
           </span>
-          <span className="relative z-10">¿Cuál es su estructura?</span>
+          <span className="relative z-10 hidden sm:inline">¿Cuál es su estructura?</span>
+          <span className="relative z-10 sm:hidden">Estructura</span>
         </button>
 
         {/* Button: Arquitectura del portal */}
         <button
           onClick={() => setOpenModal('arquitectura')}
-          className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full px-6 py-2.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/30"
+          className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-4 py-2 text-xs font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/30 md:px-5 md:py-2.5 md:text-sm"
         >
           <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 transition-all duration-500 group-hover:from-purple-600 group-hover:via-blue-500 group-hover:to-indigo-500" />
           <span className="absolute inset-0 rounded-full border-2 border-white/30 group-hover:border-white/60 transition-all duration-300" />
           <span className="absolute inset-[-2px] rounded-full bg-gradient-to-r from-white/0 via-white/40 to-white/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500 animate-shimmer" />
-          {/* Icon - Network/Architecture */}
           <span className="relative z-10">
-            <svg xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="2" width="6" height="6" rx="1"/>
               <rect x="16" y="2" width="6" height="6" rx="1"/>
               <rect x="9" y="16" width="6" height="6" rx="1"/>
@@ -77,7 +74,8 @@ export function InfoPortalButtons() {
               <path d="M12 12v4"/>
             </svg>
           </span>
-          <span className="relative z-10">Arquitectura del portal</span>
+          <span className="relative z-10 hidden sm:inline">Arquitectura del portal</span>
+          <span className="relative z-10 sm:hidden">Arquitectura</span>
         </button>
       </div>
 
@@ -115,11 +113,11 @@ export function InfoPortalButtons() {
               <div className="absolute inset-0 rounded-3xl opacity-[0.03]" style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
               }} />
-              {/* Floating AI particles effect */}
+              {/* Floating AI particles */}
               <div className="absolute top-4 left-8 h-2 w-2 rounded-full bg-aguamarina-400/30 animate-pulse" />
-              <div className="absolute top-12 right-12 h-1.5 w-1.5 rounded-full bg-verde-400/40 animate-pulse delay-300" />
-              <div className="absolute bottom-16 left-12 h-1 w-1 rounded-full bg-blue-400/30 animate-pulse delay-700" />
-              <div className="absolute bottom-8 right-20 h-2.5 w-2.5 rounded-full bg-aguamarina-300/20 animate-pulse delay-500" />
+              <div className="absolute top-12 right-12 h-1.5 w-1.5 rounded-full bg-verde-400/40 animate-pulse" />
+              <div className="absolute bottom-16 left-12 h-1 w-1 rounded-full bg-blue-400/30 animate-pulse" />
+              <div className="absolute bottom-8 right-20 h-2.5 w-2.5 rounded-full bg-aguamarina-300/20 animate-pulse" />
 
               {/* Content */}
               <div className="relative z-10 p-6 md:p-8">
@@ -146,10 +144,14 @@ export function InfoPortalButtons() {
   );
 }
 
+// Backwards compatibility export
+export function InfoPortalButtons() {
+  return <HeaderInfoButtons />;
+}
+
 function PortalContent() {
   return (
     <div>
-      {/* Icon */}
       <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-aguamarina-400 to-verde-500 shadow-lg shadow-aguamarina-500/30">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <circle cx="12" cy="12" r="10"/>
@@ -187,7 +189,6 @@ function PortalContent() {
 function EstructuraContent() {
   return (
     <div>
-      {/* Icon */}
       <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-verde-400 to-emerald-500 shadow-lg shadow-verde-500/30">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 2L2 7l10 5 10-5-10-5z"/>
@@ -212,7 +213,6 @@ function EstructuraContent() {
           El portal también se encuentra preparado para operar en un entorno productivo mediante integración con <strong>GitHub</strong>, despliegue en <strong>Vercel</strong>, conexión con <strong>Neon</strong> y uso de APIs que permiten gestionar información de forma segura y organizada.
         </p>
 
-        {/* Structure list */}
         <div className="mt-5 rounded-2xl bg-gradient-to-br from-gris-50 to-aguamarina-50/50 p-5 border border-aguamarina-100/50">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gris-500">Estructura general</p>
           <ul className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
@@ -244,7 +244,6 @@ function EstructuraContent() {
 function ArquitecturaContent() {
   return (
     <div>
-      {/* Icon */}
       <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-500 shadow-lg shadow-blue-500/30">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
           <rect x="2" y="2" width="6" height="6" rx="1"/>
@@ -257,10 +256,8 @@ function ArquitecturaContent() {
 
       <h2 className="mb-5 text-center text-xl font-bold text-gris-900">Arquitectura del Portal</h2>
 
-      {/* Architecture Diagram - Visual SVG */}
       <div className="mb-6 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/50 p-4 border border-blue-100/50 overflow-hidden">
         <svg viewBox="0 0 700 480" className="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
-          {/* Background Grid */}
           <defs>
             <linearGradient id="gradHeader" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#10b981" stopOpacity="0.9"/>
@@ -285,17 +282,17 @@ function ArquitecturaContent() {
             <filter id="shadow">
               <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.1"/>
             </filter>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+            </marker>
           </defs>
 
-          {/* Title Bar */}
           <rect x="150" y="10" width="400" height="36" rx="18" fill="url(#gradHeader)"/>
           <text x="350" y="33" textAnchor="middle" fill="white" fontSize="13" fontWeight="bold">ARQUITECTURA - Portal Gestión Estudiantes UCC</text>
 
-          {/* === FRONTEND LAYER === */}
           <rect x="20" y="60" width="660" height="100" rx="12" fill="url(#gradFrontend)" stroke="#06b6d4" strokeWidth="1.5" strokeOpacity="0.4" filter="url(#shadow)"/>
           <text x="40" y="82" fill="#0891b2" fontSize="11" fontWeight="bold">FRONTEND (Next.js 14 + React 18 + Tailwind CSS)</text>
           
-          {/* Frontend boxes */}
           <rect x="40" y="92" width="120" height="52" rx="8" fill="white" stroke="#06b6d4" strokeWidth="1" strokeOpacity="0.5"/>
           <text x="100" y="114" textAnchor="middle" fill="#155e75" fontSize="9" fontWeight="bold">Landing Page</text>
           <text x="100" y="130" textAnchor="middle" fill="#64748b" fontSize="8">Institucional + Login</text>
@@ -316,18 +313,13 @@ function ArquitecturaContent() {
           <text x="622" y="114" textAnchor="middle" fill="#155e75" fontSize="9" fontWeight="bold">Exportar</text>
           <text x="622" y="130" textAnchor="middle" fill="#64748b" fontSize="8">CSV / Excel</text>
 
-          {/* Arrow down */}
           <path d="M350 160 L350 175" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
-          <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/></marker></defs>
 
-          {/* === MIDDLEWARE + SECURITY === */}
           <rect x="120" y="178" width="460" height="38" rx="8" fill="#fef3c7" stroke="#f59e0b" strokeWidth="1" strokeOpacity="0.5" filter="url(#shadow)"/>
-          <text x="350" y="201" textAnchor="middle" fill="#92400e" fontSize="10" fontWeight="bold">🔒 Middleware: JWT Auth + Bot Blocking + DELETE Blocking + Security Headers</text>
+          <text x="350" y="201" textAnchor="middle" fill="#92400e" fontSize="10" fontWeight="bold">Middleware: JWT Auth + Bot Blocking + DELETE Blocking + Headers</text>
 
-          {/* Arrow down */}
           <path d="M350 216 L350 232" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
 
-          {/* === BACKEND / API LAYER === */}
           <rect x="20" y="235" width="660" height="100" rx="12" fill="url(#gradBackend)" stroke="#8b5cf6" strokeWidth="1.5" strokeOpacity="0.4" filter="url(#shadow)"/>
           <text x="40" y="257" fill="#6d28d9" fontSize="11" fontWeight="bold">BACKEND (API Routes - Next.js Server)</text>
           
@@ -351,10 +343,8 @@ function ArquitecturaContent() {
           <text x="611" y="289" textAnchor="middle" fill="#4c1d95" fontSize="9" fontWeight="bold">/api/autogestion</text>
           <text x="611" y="305" textAnchor="middle" fill="#64748b" fontSize="8">Registro público</text>
 
-          {/* Arrow down */}
           <path d="M350 335 L350 352" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
 
-          {/* === DATABASE LAYER === */}
           <rect x="120" y="355" width="460" height="60" rx="12" fill="url(#gradDB)" stroke="#f59e0b" strokeWidth="1.5" strokeOpacity="0.4" filter="url(#shadow)"/>
           <text x="350" y="377" textAnchor="middle" fill="#92400e" fontSize="11" fontWeight="bold">BASE DE DATOS (Prisma 7 + Neon PostgreSQL)</text>
           
@@ -367,9 +357,8 @@ function ArquitecturaContent() {
           <rect x="400" y="385" width="130" height="22" rx="6" fill="white" stroke="#f59e0b" strokeWidth="0.8" strokeOpacity="0.5"/>
           <text x="465" y="400" textAnchor="middle" fill="#78350f" fontSize="8" fontWeight="bold">Estudiantes (171)</text>
 
-          {/* === DEPLOYMENT LAYER === */}
           <rect x="120" y="430" width="460" height="40" rx="12" fill="url(#gradDeploy)" stroke="#ec4899" strokeWidth="1.5" strokeOpacity="0.4" filter="url(#shadow)"/>
-          <text x="350" y="455" textAnchor="middle" fill="#9d174d" fontSize="11" fontWeight="bold">🚀 DESPLIEGUE: GitHub → Vercel (Auto-deploy) + Resend Emails + Neon Cloud</text>
+          <text x="350" y="455" textAnchor="middle" fill="#9d174d" fontSize="11" fontWeight="bold">DESPLIEGUE: GitHub - Vercel (Auto-deploy) + Resend + Neon Cloud</text>
         </svg>
       </div>
 

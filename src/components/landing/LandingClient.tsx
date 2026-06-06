@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { HeroSection } from "./HeroSection";
 import { GlassmorphismCards } from "./GlassmorphismCards";
-import { InfoPortalButtons } from "./InfoModals";
 import { LoginModal } from "@/components/auth/LoginModal";
 
 export function LandingClient() {
@@ -26,9 +25,6 @@ export function LandingClient() {
   return (
     <>
       <HeroSection onLoginClick={handleLoginClick} />
-      <div className="-mt-16 mb-4">
-        <InfoPortalButtons />
-      </div>
       <GlassmorphismCards />
 
       {/* Error message if modal fails to load (Req 1.7) */}
