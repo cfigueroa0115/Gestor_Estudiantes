@@ -251,6 +251,8 @@ function EstructuraContent() {
 }
 
 function ArquitecturaContent() {
+  const [zoomed, setZoomed] = useState(false);
+
   return (
     <div>
       <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-500 shadow-lg shadow-blue-500/30">
@@ -265,111 +267,62 @@ function ArquitecturaContent() {
 
       <h2 className="mb-5 text-center text-xl font-bold text-gris-900">Arquitectura del Portal</h2>
 
-      <div className="mb-6 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/50 p-4 border border-blue-100/50 overflow-hidden">
-        <svg viewBox="0 0 700 480" className="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="gradHeader" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#10b981" stopOpacity="0.9"/>
-              <stop offset="100%" stopColor="#059669" stopOpacity="0.9"/>
-            </linearGradient>
-            <linearGradient id="gradFrontend" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.15"/>
-              <stop offset="100%" stopColor="#0891b2" stopOpacity="0.08"/>
-            </linearGradient>
-            <linearGradient id="gradBackend" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.15"/>
-              <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.08"/>
-            </linearGradient>
-            <linearGradient id="gradDB" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.15"/>
-              <stop offset="100%" stopColor="#d97706" stopOpacity="0.08"/>
-            </linearGradient>
-            <linearGradient id="gradDeploy" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#ec4899" stopOpacity="0.15"/>
-              <stop offset="100%" stopColor="#db2777" stopOpacity="0.08"/>
-            </linearGradient>
-            <filter id="shadow">
-              <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.1"/>
-            </filter>
-            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-              <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
-            </marker>
-          </defs>
-
-          <rect x="150" y="10" width="400" height="36" rx="18" fill="url(#gradHeader)"/>
-          <text x="350" y="33" textAnchor="middle" fill="white" fontSize="13" fontWeight="bold">ARQUITECTURA - Portal Gestión Estudiantes UCC</text>
-
-          <rect x="20" y="60" width="660" height="100" rx="12" fill="url(#gradFrontend)" stroke="#06b6d4" strokeWidth="1.5" strokeOpacity="0.4" filter="url(#shadow)"/>
-          <text x="40" y="82" fill="#0891b2" fontSize="11" fontWeight="bold">FRONTEND (Next.js 14 + React 18 + Tailwind CSS)</text>
-          
-          <rect x="40" y="92" width="120" height="52" rx="8" fill="white" stroke="#06b6d4" strokeWidth="1" strokeOpacity="0.5"/>
-          <text x="100" y="114" textAnchor="middle" fill="#155e75" fontSize="9" fontWeight="bold">Landing Page</text>
-          <text x="100" y="130" textAnchor="middle" fill="#64748b" fontSize="8">Institucional + Login</text>
-          
-          <rect x="175" y="92" width="120" height="52" rx="8" fill="white" stroke="#06b6d4" strokeWidth="1" strokeOpacity="0.5"/>
-          <text x="235" y="114" textAnchor="middle" fill="#155e75" fontSize="9" fontWeight="bold">Dashboard</text>
-          <text x="235" y="130" textAnchor="middle" fill="#64748b" fontSize="8">Solicitudes + Analytics</text>
-          
-          <rect x="310" y="92" width="120" height="52" rx="8" fill="white" stroke="#06b6d4" strokeWidth="1" strokeOpacity="0.5"/>
-          <text x="370" y="114" textAnchor="middle" fill="#155e75" fontSize="9" fontWeight="bold">Autogestión</text>
-          <text x="370" y="130" textAnchor="middle" fill="#64748b" fontSize="8">Acceso público QR</text>
-          
-          <rect x="445" y="92" width="120" height="52" rx="8" fill="white" stroke="#06b6d4" strokeWidth="1" strokeOpacity="0.5"/>
-          <text x="505" y="114" textAnchor="middle" fill="#155e75" fontSize="9" fontWeight="bold">Admin Usuarios</text>
-          <text x="505" y="130" textAnchor="middle" fill="#64748b" fontSize="8">CRUD + Estados</text>
-
-          <rect x="580" y="92" width="85" height="52" rx="8" fill="white" stroke="#06b6d4" strokeWidth="1" strokeOpacity="0.5"/>
-          <text x="622" y="114" textAnchor="middle" fill="#155e75" fontSize="9" fontWeight="bold">Exportar</text>
-          <text x="622" y="130" textAnchor="middle" fill="#64748b" fontSize="8">CSV / Excel</text>
-
-          <path d="M350 160 L350 175" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
-
-          <rect x="120" y="178" width="460" height="38" rx="8" fill="#fef3c7" stroke="#f59e0b" strokeWidth="1" strokeOpacity="0.5" filter="url(#shadow)"/>
-          <text x="350" y="201" textAnchor="middle" fill="#92400e" fontSize="10" fontWeight="bold">Middleware: JWT Auth + Bot Blocking + DELETE Blocking + Headers</text>
-
-          <path d="M350 216 L350 232" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
-
-          <rect x="20" y="235" width="660" height="100" rx="12" fill="url(#gradBackend)" stroke="#8b5cf6" strokeWidth="1.5" strokeOpacity="0.4" filter="url(#shadow)"/>
-          <text x="40" y="257" fill="#6d28d9" fontSize="11" fontWeight="bold">BACKEND (API Routes - Next.js Server)</text>
-          
-          <rect x="40" y="267" width="105" height="52" rx="8" fill="white" stroke="#8b5cf6" strokeWidth="1" strokeOpacity="0.5"/>
-          <text x="92" y="289" textAnchor="middle" fill="#4c1d95" fontSize="9" fontWeight="bold">/api/auth</text>
-          <text x="92" y="305" textAnchor="middle" fill="#64748b" fontSize="8">Login/Logout/Me</text>
-
-          <rect x="158" y="267" width="105" height="52" rx="8" fill="white" stroke="#8b5cf6" strokeWidth="1" strokeOpacity="0.5"/>
-          <text x="210" y="289" textAnchor="middle" fill="#4c1d95" fontSize="9" fontWeight="bold">/api/users</text>
-          <text x="210" y="305" textAnchor="middle" fill="#64748b" fontSize="8">CRUD Usuarios</text>
-
-          <rect x="276" y="267" width="135" height="52" rx="8" fill="white" stroke="#8b5cf6" strokeWidth="1" strokeOpacity="0.5"/>
-          <text x="343" y="289" textAnchor="middle" fill="#4c1d95" fontSize="9" fontWeight="bold">/api/student-requests</text>
-          <text x="343" y="305" textAnchor="middle" fill="#64748b" fontSize="8">Solicitudes + Stats</text>
-
-          <rect x="424" y="267" width="120" height="52" rx="8" fill="white" stroke="#8b5cf6" strokeWidth="1" strokeOpacity="0.5"/>
-          <text x="484" y="289" textAnchor="middle" fill="#4c1d95" fontSize="9" fontWeight="bold">/api/estudiantes</text>
-          <text x="484" y="305" textAnchor="middle" fill="#64748b" fontSize="8">Auto-lookup</text>
-
-          <rect x="557" y="267" width="108" height="52" rx="8" fill="white" stroke="#8b5cf6" strokeWidth="1" strokeOpacity="0.5"/>
-          <text x="611" y="289" textAnchor="middle" fill="#4c1d95" fontSize="9" fontWeight="bold">/api/autogestion</text>
-          <text x="611" y="305" textAnchor="middle" fill="#64748b" fontSize="8">Registro público</text>
-
-          <path d="M350 335 L350 352" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
-
-          <rect x="120" y="355" width="460" height="60" rx="12" fill="url(#gradDB)" stroke="#f59e0b" strokeWidth="1.5" strokeOpacity="0.4" filter="url(#shadow)"/>
-          <text x="350" y="377" textAnchor="middle" fill="#92400e" fontSize="11" fontWeight="bold">BASE DE DATOS (Prisma 7 + Neon PostgreSQL)</text>
-          
-          <rect x="140" y="385" width="100" height="22" rx="6" fill="white" stroke="#f59e0b" strokeWidth="0.8" strokeOpacity="0.5"/>
-          <text x="190" y="400" textAnchor="middle" fill="#78350f" fontSize="8" fontWeight="bold">Users (11)</text>
-          
-          <rect x="255" y="385" width="130" height="22" rx="6" fill="white" stroke="#f59e0b" strokeWidth="0.8" strokeOpacity="0.5"/>
-          <text x="320" y="400" textAnchor="middle" fill="#78350f" fontSize="8" fontWeight="bold">StudentRequests</text>
-          
-          <rect x="400" y="385" width="130" height="22" rx="6" fill="white" stroke="#f59e0b" strokeWidth="0.8" strokeOpacity="0.5"/>
-          <text x="465" y="400" textAnchor="middle" fill="#78350f" fontSize="8" fontWeight="bold">Estudiantes (171)</text>
-
-          <rect x="120" y="430" width="460" height="40" rx="12" fill="url(#gradDeploy)" stroke="#ec4899" strokeWidth="1.5" strokeOpacity="0.4" filter="url(#shadow)"/>
-          <text x="350" y="455" textAnchor="middle" fill="#9d174d" fontSize="11" fontWeight="bold">DESPLIEGUE: GitHub - Vercel (Auto-deploy) + Resend + Neon Cloud</text>
-        </svg>
+      {/* Architecture Image */}
+      <div className="mb-6 rounded-2xl border border-blue-100/50 overflow-hidden bg-white shadow-sm">
+        <div
+          className="relative cursor-zoom-in group"
+          onClick={() => setZoomed(true)}
+        >
+          <img
+            src="/arquitectura-portal.jpeg"
+            alt="Arquitectura del Portal de Gestión de Estudiantes UCC"
+            className="w-full h-auto object-contain"
+            style={{ imageRendering: 'auto' }}
+          />
+          {/* Zoom overlay hint */}
+          <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/10 transition-all duration-300">
+            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full px-3 py-1.5 text-xs font-medium text-gris-700 shadow-md flex items-center gap-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.3-4.3"/>
+                <path d="M11 8v6"/>
+                <path d="M8 11h6"/>
+              </svg>
+              Clic para ampliar
+            </span>
+          </div>
+        </div>
       </div>
+
+      {/* Fullscreen zoom modal */}
+      <AnimatePresence>
+        {zoomed && (
+          <div
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-sm cursor-zoom-out p-4"
+            onClick={() => setZoomed(false)}
+          >
+            <motion.img
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.2 }}
+              src="/arquitectura-portal.jpeg"
+              alt="Arquitectura del Portal - Vista ampliada"
+              className="max-h-[95vh] max-w-[95vw] object-contain rounded-lg shadow-2xl"
+              style={{ imageRendering: 'auto' }}
+            />
+            <button
+              onClick={() => setZoomed(false)}
+              className="absolute top-4 right-4 rounded-full bg-white/20 p-2.5 text-white hover:bg-white/40 transition-colors"
+              aria-label="Cerrar zoom"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        )}
+      </AnimatePresence>
 
       <div className="space-y-3 text-sm leading-relaxed text-gris-700 text-justify">
         <p>
