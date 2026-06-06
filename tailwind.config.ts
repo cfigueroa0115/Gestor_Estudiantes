@@ -93,6 +93,15 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      animation: {
+        shimmer: "shimmer 2s ease-in-out infinite",
+      },
+      keyframes: {
+        shimmer: {
+          "0%": { backgroundPosition: "-250% 0" },
+          "100%": { backgroundPosition: "250% 0" },
+        },
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

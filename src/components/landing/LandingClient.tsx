@@ -26,7 +26,9 @@ export function LandingClient() {
   return (
     <>
       <HeroSection onLoginClick={handleLoginClick} />
-      <InfoPortalButtons />
+      <div className="-mt-16 mb-4">
+        <InfoPortalButtons />
+      </div>
       <GlassmorphismCards />
 
       {/* Error message if modal fails to load (Req 1.7) */}
