@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { HeroSection } from "./HeroSection";
 import { GlassmorphismCards } from "./GlassmorphismCards";
+import { QRAutoGestionButton } from "./QRButton";
 import { LoginModal } from "@/components/auth/LoginModal";
 
 export function LandingClient() {
@@ -26,6 +27,9 @@ export function LandingClient() {
     <>
       <HeroSection onLoginClick={handleLoginClick} />
       <GlassmorphismCards />
+
+      {/* Floating QR Button */}
+      <QRAutoGestionButton />
 
       {/* Error message if modal fails to load (Req 1.7) */}
       {modalError && (
