@@ -19,10 +19,10 @@ export function HeaderInfoButtons() {
     <>
       {/* Buttons in the top-right header area */}
       <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
-        {/* Button: ¿Qué es este portal? */}
+        {/* Button: Info. General */}
         <button
           onClick={() => setOpenModal('portal')}
-          className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full px-3 py-1.5 text-[10px] font-semibold text-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-aguamarina-500/30 sm:px-4 sm:py-2 sm:text-xs md:gap-2 md:px-5 md:py-2.5 md:text-sm"
+          className="group relative inline-flex w-[90px] items-center justify-center gap-1.5 overflow-hidden rounded-full py-1.5 text-[10px] font-semibold text-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-aguamarina-500/30 sm:w-[110px] sm:py-2 sm:text-xs md:w-[140px] md:gap-2 md:py-2.5 md:text-sm"
         >
           <span className="absolute inset-0 bg-gradient-to-r from-aguamarina-500 via-verde-500 to-aguamarina-600 transition-all duration-500 group-hover:from-verde-600 group-hover:via-aguamarina-500 group-hover:to-verde-500" />
           <span className="absolute inset-0 rounded-full border border-white/30 group-hover:border-white/60 transition-all duration-300" />
@@ -33,13 +33,13 @@ export function HeaderInfoButtons() {
               <path d="M12 8h.01"/>
             </svg>
           </span>
-          <span className="relative z-10">Portal</span>
+          <span className="relative z-10">Info. General</span>
         </button>
 
-        {/* Button: ¿Cuál es su estructura? */}
+        {/* Button: Estructura */}
         <button
           onClick={() => setOpenModal('estructura')}
-          className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full px-3 py-1.5 text-[10px] font-semibold text-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-verde-500/30 sm:px-4 sm:py-2 sm:text-xs md:gap-2 md:px-5 md:py-2.5 md:text-sm"
+          className="group relative inline-flex w-[90px] items-center justify-center gap-1.5 overflow-hidden rounded-full py-1.5 text-[10px] font-semibold text-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-verde-500/30 sm:w-[110px] sm:py-2 sm:text-xs md:w-[140px] md:gap-2 md:py-2.5 md:text-sm"
         >
           <span className="absolute inset-0 bg-gradient-to-r from-verde-500 via-emerald-500 to-verde-600 transition-all duration-500 group-hover:from-emerald-600 group-hover:via-verde-500 group-hover:to-emerald-500" />
           <span className="absolute inset-0 rounded-full border border-white/30 group-hover:border-white/60 transition-all duration-300" />
@@ -53,10 +53,10 @@ export function HeaderInfoButtons() {
           <span className="relative z-10">Estructura</span>
         </button>
 
-        {/* Button: Arquitectura del portal */}
+        {/* Button: Arquitectura */}
         <button
           onClick={() => setOpenModal('arquitectura')}
-          className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full px-3 py-1.5 text-[10px] font-semibold text-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/30 sm:px-4 sm:py-2 sm:text-xs md:gap-2 md:px-5 md:py-2.5 md:text-sm"
+          className="group relative inline-flex w-[90px] items-center justify-center gap-1.5 overflow-hidden rounded-full py-1.5 text-[10px] font-semibold text-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/30 sm:w-[110px] sm:py-2 sm:text-xs md:w-[140px] md:gap-2 md:py-2.5 md:text-sm"
         >
           <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 transition-all duration-500 group-hover:from-purple-600 group-hover:via-blue-500 group-hover:to-indigo-500" />
           <span className="absolute inset-0 rounded-full border border-white/30 group-hover:border-white/60 transition-all duration-300" />
@@ -69,8 +69,7 @@ export function HeaderInfoButtons() {
               <path d="M12 12v4"/>
             </svg>
           </span>
-          <span className="relative z-10 hidden sm:inline">Arquitectura</span>
-          <span className="relative z-10 sm:hidden">Arq.</span>
+          <span className="relative z-10">Arquitectura</span>
         </button>
       </div>
 
