@@ -1,13 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 type ModalType = 'portal' | 'estructura' | 'arquitectura' | null;
 
 export function HeaderInfoButtons() {
   const [openModal, setOpenModal] = useState<ModalType>(null);
+  const [mounted, setMounted] = useState(false);
   const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <>
@@ -79,8 +85,9 @@ export function HeaderInfoButtons() {
         </button>
       </div>
 
-      {/* Modals */}
-      <AnimatePresence>
+      {/* Modals - rendered via Portal to avoid z-index stacking context issues */}
+      {mounted && createPortal(
+        <AnimatePresence>
         {openModal && (
           <div
             className="fixed inset-0 z-[100] flex items-center justify-center p-4"
@@ -139,7 +146,9 @@ export function HeaderInfoButtons() {
             </motion.div>
           </div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+        document.body
+      )}
     </>
   );
 }
