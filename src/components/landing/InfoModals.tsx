@@ -137,8 +137,16 @@ function PortalContent() {
   return (
     <div>
       <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-aguamarina-400 to-verde-500 shadow-lg shadow-aguamarina-500/30">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+          {/* University/Academic building icon */}
+          <path d="M12 2L2 7h20L12 2z"/>
+          <rect x="4" y="7" width="16" height="2" fill="currentColor" opacity="0.3"/>
+          <rect x="5" y="9" width="2" height="9"/>
+          <rect x="9" y="9" width="2" height="9"/>
+          <rect x="13" y="9" width="2" height="9"/>
+          <rect x="17" y="9" width="2" height="9"/>
+          <rect x="3" y="18" width="18" height="2" rx="0.5"/>
+          <circle cx="12" cy="5" r="1" fill="currentColor"/>
         </svg>
       </div>
 
