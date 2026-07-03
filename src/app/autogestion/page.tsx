@@ -182,24 +182,32 @@ export default function AutogestionPage() {
 
         <div className="rounded-2xl bg-white p-6 shadow-sm">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {/* Sección 1 */}
+            {/* Sección: Consulta de información */}
             <fieldset>
-              <legend className="mb-3 text-sm font-semibold text-gris-700">Datos del estudiante</legend>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <legend className="mb-1 text-sm font-semibold text-gris-700">Consulta de información</legend>
+              <p className="mb-3 text-xs text-gris-500">Ingrese el ID Estudiante o el Nro. Documento para cargar los datos</p>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <div>
                   <label htmlFor="fecha_solicitud" className="mb-1 block text-sm font-medium text-gris-700">Fecha de solicitud</label>
                   <input id="fecha_solicitud" type="text" readOnly className="w-full rounded-lg border border-gris-300 bg-gris-50 px-3 py-2 text-sm text-gris-600" {...register('fecha_solicitud')} />
                 </div>
                 <div>
                   <label htmlFor="id_estudiante" className="mb-1 block text-sm font-medium text-gris-700">ID Estudiante</label>
-                  <input id="id_estudiante" type="text" inputMode="numeric" maxLength={10} placeholder="Máximo 10 dígitos" className={inputClass(!!errors.id_estudiante, studentFound)} {...register('id_estudiante')} disabled={isSubmitting || studentFound} onChange={handleIdEstudianteChange} />
+                  <input id="id_estudiante" type="text" inputMode="numeric" maxLength={10} placeholder="Máximo 10 dígitos" className={inputClass(!!errors.id_estudiante)} {...register('id_estudiante')} disabled={isSubmitting} onChange={handleIdEstudianteChange} />
                   {errors.id_estudiante && <p className="mt-1 text-xs text-red-600">{errors.id_estudiante.message}</p>}
                 </div>
                 <div>
                   <label htmlFor="nro_documento" className="mb-1 block text-sm font-medium text-gris-700">Nro. Documento</label>
-                  <input id="nro_documento" type="text" inputMode="numeric" maxLength={20} placeholder="Número de documento" className={inputClass(!!errors.nro_documento, studentFound)} {...register('nro_documento')} disabled={isSubmitting || studentFound} onChange={handleNroDocumentoChange} />
+                  <input id="nro_documento" type="text" inputMode="numeric" maxLength={20} placeholder="Número de documento" className={inputClass(!!errors.nro_documento)} {...register('nro_documento')} disabled={isSubmitting} onChange={handleNroDocumentoChange} />
                   {errors.nro_documento && <p className="mt-1 text-xs text-red-600">{errors.nro_documento.message}</p>}
                 </div>
+              </div>
+            </fieldset>
+
+            {/* Sección: Datos del estudiante */}
+            <fieldset>
+              <legend className="mb-3 text-sm font-semibold text-gris-700">Datos del estudiante</legend>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <label htmlFor="nombres" className="mb-1 block text-sm font-medium text-gris-700">Nombres</label>
                   <input id="nombres" type="text" maxLength={100} placeholder="Nombres" className={inputClass(!!errors.nombres, studentFound)} {...register('nombres')} disabled={isSubmitting || studentFound} />
@@ -211,7 +219,7 @@ export default function AutogestionPage() {
                   {errors.apellidos && <p className="mt-1 text-xs text-red-600">{errors.apellidos.message}</p>}
                 </div>
                 <div>
-                  <label htmlFor="correo" className="mb-1 block text-sm font-medium text-gris-700">Correo electr&oacute;nico</label>
+                  <label htmlFor="correo" className="mb-1 block text-sm font-medium text-gris-700">Correo electrónico</label>
                   <input id="correo" type="email" placeholder="correo@ejemplo.com" className={inputClass(!!errors.correo, studentFound)} {...register('correo')} disabled={isSubmitting || studentFound} />
                   {errors.correo && <p className="mt-1 text-xs text-red-600">{errors.correo.message}</p>}
                 </div>
