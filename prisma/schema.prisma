@@ -95,7 +95,7 @@ model StudentRequest {
   apellidos              String         @db.VarChar(100)
   correo                 String         @db.VarChar(100)
   celular                String         @db.VarChar(15)
-  programa               String         @db.VarChar(50)
+  programa               String         @db.VarChar(150)
   modalidad              Modalidad
   tipo_solicitud         TipoSolicitud
   solicitud_academica    String?        @db.VarChar(100)
