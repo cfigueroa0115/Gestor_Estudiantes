@@ -45,7 +45,7 @@ export function HeroSection({ onLoginClick }: HeroSectionProps) {
           {...animationProps(0.2)}
           className="mx-auto mt-4 max-w-2xl text-base text-gris-600 sm:text-lg md:mt-6 md:text-xl"
         >
-          Programa de Ingeniería Industrial
+          Facultad de Ingeniería
         </motion.p>
 
         <motion.p
