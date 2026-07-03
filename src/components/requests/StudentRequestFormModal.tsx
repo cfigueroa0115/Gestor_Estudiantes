@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -15,6 +15,12 @@ interface StudentRequestFormModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+}
+
+interface ProgramaOption {
+  id: string;
+  codigo: string;
+  nombre: string;
 }
 
 const MODALIDAD_OPTIONS = ['Presencial', 'Virtual', 'Funza'] as const;
@@ -36,12 +42,18 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [radicadoConfirmation, setRadicadoConfirmation] = useState<string | null>(null);
   const [studentFound, setStudentFound] = useState(false);
+  const [programas, setProgramas] = useState<ProgramaOption[]>([]);
+
+  // Fetch programas list
+  useEffect(() => {
+    fetch('/api/programas').then(r => r.ok ? r.json() : []).then(setProgramas).catch(() => {});
+  }, []);
 
   const { register, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<StudentRequestInput>({
     resolver: zodResolver(studentRequestSchema),
     defaultValues: {
       fecha_solicitud: getTodayDate(), id_estudiante: '', nro_documento: '', nombres: '', apellidos: '',
-      correo: '', celular: '', programa: 'Ingeniería industrial',
+      correo: '', celular: '', programa: '',
       modalidad: undefined, tipo_solicitud: undefined,
       solicitud_academica: null, solicitud_financiera: null,
       descripcion_solicitud: '', requiere_escalar: undefined as unknown as boolean, area_escalar: null,
@@ -254,7 +266,11 @@ export function StudentRequestFormModal({ isOpen, onClose, onSuccess }: StudentR
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
                 <label htmlFor="programa" className="mb-1 block text-sm font-medium text-gris-700">Programa</label>
-                <input id="programa" type="text" readOnly className="w-full rounded-lg border border-gris-300 bg-gris-50 px-3 py-2 text-sm text-gris-600" {...register('programa')} />
+                <select id="programa" className={inputClass(!!errors.programa)} {...register('programa')} disabled={isSubmitting} defaultValue="">
+                  <option value="" disabled>Seleccione un programa</option>
+                  {programas.map((p) => <option key={p.id} value={p.nombre}>{p.nombre}</option>)}
+                </select>
+                {errors.programa && <p className="mt-1 text-xs text-red-600">{errors.programa.message}</p>}
               </div>
               <div>
                 <label htmlFor="modalidad" className="mb-1 block text-sm font-medium text-gris-700">Modalidad</label>
