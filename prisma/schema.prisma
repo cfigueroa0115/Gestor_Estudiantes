@@ -36,6 +36,21 @@ enum EstadoSolicitud {
   Cerrada
 }
 
+model Programa {
+  id              String    @id @default(uuid()) @db.Uuid
+  codigo          String    @unique @db.VarChar(10)
+  nombre          String    @db.VarChar(100)
+  activo          Boolean   @default(true)
+  admin_ids       String[]  @default([])
+  email_escalar   String?   @db.VarChar(100)
+  created_at      DateTime  @default(now())
+
+  // Relations
+  users           User[]    @relation("UserPrograma")
+
+  @@map("programas")
+}
+
 model User {
   id              String    @id @default(uuid()) @db.Uuid
   usuario         String    @unique @db.VarChar(20)
@@ -43,6 +58,7 @@ model User {
   password_hash   String
   cargo           Cargo
   organizacion    String?   @db.VarChar(20)
+  programa_id     String?   @db.Uuid
   estado          Estado    @default(Activo)
   created_at      DateTime  @default(now())
   updated_at      DateTime  @updatedAt
@@ -58,6 +74,9 @@ model User {
   updater         User?     @relation("UserUpdater", fields: [updated_by], references: [id])
   createdUsers    User[]    @relation("UserCreator")
   updatedUsers    User[]    @relation("UserUpdater")
+
+  // Programa relation
+  programa        Programa? @relation("UserPrograma", fields: [programa_id], references: [id])
 
   // Relation to student requests
   studentRequests StudentRequest[] @relation("RequestCreator")

@@ -43,6 +43,8 @@ export async function verifyToken(token: string): Promise<JWTPayload | null> {
       id: payload.id as string,
       usuario: payload.usuario as string,
       cargo: payload.cargo as JWTPayload['cargo'],
+      programa_id: payload.programa_id as string | undefined,
+      programa_codigo: payload.programa_codigo as string | undefined,
       iat: payload.iat as number,
       exp: payload.exp as number,
     };

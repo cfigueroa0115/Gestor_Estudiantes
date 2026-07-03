@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,11 +12,26 @@ interface LoginModalProps {
   onClose: () => void;
 }
 
+interface ProgramaOption {
+  id: string;
+  codigo: string;
+  nombre: string;
+}
+
 export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [programas, setProgramas] = useState<ProgramaOption[]>([]);
+
+  // Fetch programas on mount
+  useEffect(() => {
+    fetch("/api/programas")
+      .then((r) => r.ok ? r.json() : [])
+      .then((data) => setProgramas(data))
+      .catch(() => {});
+  }, []);
 
   const {
     register,
@@ -194,6 +209,41 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
             {errors.cargo && (
               <p className="mt-1 text-xs text-red-600">
                 {errors.cargo.message}
+              </p>
+            )}
+          </div>
+
+          {/* Campo Programa */}
+          <div>
+            <label
+              htmlFor="programa"
+              className="mb-1 block text-sm font-medium text-gris-700"
+            >
+              Programa
+            </label>
+            <select
+              id="programa"
+              className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:border-aguamarina-500 focus:ring-1 focus:ring-aguamarina-500 ${
+                errors.programa
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                  : "border-gris-300"
+              }`}
+              {...register("programa")}
+              disabled={isLoading}
+              defaultValue=""
+            >
+              <option value="" disabled>
+                Seleccione su programa
+              </option>
+              {programas.map((p) => (
+                <option key={p.id} value={p.codigo}>
+                  {p.nombre}
+                </option>
+              ))}
+            </select>
+            {errors.programa && (
+              <p className="mt-1 text-xs text-red-600">
+                {errors.programa.message}
               </p>
             )}
           </div>

@@ -8,6 +8,8 @@ export interface JWTPayload {
   id: string;
   usuario: string;
   cargo: Cargo;
+  programa_id?: string;
+  programa_codigo?: string;
   iat: number;
   exp: number;
 }

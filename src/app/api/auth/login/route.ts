@@ -24,9 +24,10 @@ export async function POST(request: NextRequest) {
 
     const { usuario, contrasena, cargo } = parsed.data;
 
-    // Find user by "usuario" field
+    // Find user by "usuario" field (include programa relation)
     const user = await prisma.user.findUnique({
       where: { usuario },
+      include: { programa: { select: { id: true, codigo: true } } },
     });
 
     // Check if account is locked (must check before other validations)
@@ -97,11 +98,13 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Generate JWT token
+    // Generate JWT token (include programa info)
     const token = await signToken({
       id: user!.id,
       usuario: user!.usuario,
       cargo: user!.cargo,
+      programa_id: user!.programa?.id,
+      programa_codigo: user!.programa?.codigo,
     });
 
     // Create response and set session cookie

@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 /**
  * Schema de validación para el formulario de login.
- * Validates: Requirements 2.1, 2.2, 11.1
  */
 export const loginSchema = z.object({
   usuario: z
@@ -15,6 +14,10 @@ export const loginSchema = z.object({
   cargo: z.enum(['Profesor', 'Jefe', 'Administrativo'], {
     message: 'Seleccione un cargo válido',
   }),
+  programa: z
+    .string()
+    .min(1, 'Seleccione un programa')
+    .optional(),
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;
