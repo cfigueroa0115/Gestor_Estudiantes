@@ -4,24 +4,23 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ModuleCards } from '@/components/dashboard/ModuleCards';
 
-// Usuarios administradores que pueden ver el Dashboard
-const ADMIN_USERS = ['1129564302', '52317897'];
-
 export default function DashboardPage() {
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [programaNombre, setProgramaNombre] = useState('');
 
   useEffect(() => {
-    async function checkAdmin() {
+    async function checkUser() {
       try {
         const res = await fetch('/api/auth/me');
         if (res.ok) {
           const data = await res.json();
-          setIsAdmin(ADMIN_USERS.includes(data.usuario));
+          setIsAdmin(data.is_admin === true);
+          setProgramaNombre(data.programa_nombre || 'Ingeniería Industrial');
         }
       } catch { /* ignore */ }
     }
-    checkAdmin();
+    checkUser();
   }, []);
 
   const handleVirtualRoomClick = () => {
@@ -36,13 +35,13 @@ export default function DashboardPage() {
           Gestor de estudiantes
         </h1>
         <p className="mt-1 text-base text-gris-600 md:text-lg">
-          Programa de Ingenier&iacute;a Industrial
+          {programaNombre}
         </p>
       </div>
 
       {/* Module cards */}
       <section className="mb-8">
-        <h2 className="mb-4 text-lg font-semibold text-gris-800">M&oacute;dulos</h2>
+        <h2 className="mb-4 text-lg font-semibold text-gris-800">Módulos</h2>
         <ModuleCards onVirtualRoomClick={handleVirtualRoomClick} />
       </section>
 
@@ -55,10 +54,10 @@ export default function DashboardPage() {
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
           </svg>
-          Administraci&oacute;n de usuarios
+          Administración de usuarios
         </button>
 
-        {/* Dashboard button - solo visible para administradores */}
+        {/* Dashboard button - visible para administradores del programa */}
         {isAdmin && (
           <button
             onClick={() => router.push('/dashboard/analytics')}

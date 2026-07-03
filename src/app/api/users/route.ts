@@ -22,6 +22,12 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Get current user's programa_id for filtering
+    const currentUser = await prisma.user.findUnique({
+      where: { id: session.id },
+      select: { programa_id: true },
+    });
+
     const { searchParams } = new URL(request.url);
 
     // Parse pagination params
@@ -52,6 +58,11 @@ export async function GET(request: NextRequest) {
 
     if (estado && ['Activo', 'Inactivo'].includes(estado)) {
       where.estado = estado;
+    }
+
+    // Filter by user's programa (micrositio isolation)
+    if (currentUser?.programa_id) {
+      where.programa_id = currentUser.programa_id;
     }
 
     // Get total count for pagination

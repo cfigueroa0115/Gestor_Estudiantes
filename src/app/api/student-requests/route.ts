@@ -50,6 +50,13 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // 1.1 Get user's programa for filtering
+    const currentUser = await prisma.user.findUnique({
+      where: { id: session.id },
+      select: { programa: { select: { codigo: true, nombre: true } } },
+    });
+    const userProgramaNombre = currentUser?.programa?.nombre;
+
     // 2. Parse query parameters
     const { searchParams } = request.nextUrl;
 
@@ -73,6 +80,11 @@ export async function GET(request: NextRequest) {
     // 3. Build where clause with filters
     const where: Prisma.StudentRequestWhereInput = {};
     const andConditions: Prisma.StudentRequestWhereInput[] = [];
+
+    // Filter by user's programa (micrositio isolation)
+    if (userProgramaNombre) {
+      andConditions.push({ programa: { equals: userProgramaNombre, mode: 'insensitive' } });
+    }
 
     // Search filter: partial match (OR) across multiple fields
     if (search) {

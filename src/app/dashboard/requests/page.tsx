@@ -45,7 +45,7 @@ export default function RequestsPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {
     fetch('/api/auth/me').then(r => r.ok ? r.json() : null).then(data => {
-      if (data) setIsAdmin(['1129564302', '52317897'].includes(data.usuario));
+      if (data) setIsAdmin(data.is_admin === true);
     }).catch(() => {});
   }, []);
 

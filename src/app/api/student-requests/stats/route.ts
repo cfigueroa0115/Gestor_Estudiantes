@@ -16,8 +16,20 @@ export async function GET() {
       return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
     }
 
-    // Get all requests for stats
+    // Get user's programa for filtering
+    const currentUser = await prisma.user.findUnique({
+      where: { id: session.id },
+      select: { programa: { select: { nombre: true } } },
+    });
+    const userProgramaNombre = currentUser?.programa?.nombre;
+
+    // Get all requests for stats (filtered by programa)
+    const whereFilter = userProgramaNombre
+      ? { programa: { equals: userProgramaNombre, mode: 'insensitive' as const } }
+      : {};
+
     const allRequests = await prisma.studentRequest.findMany({
+      where: whereFilter,
       select: {
         estado_solicitud: true,
         tipo_solicitud: true,

@@ -173,6 +173,15 @@ export async function GET(request: NextRequest) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const where: any = {};
 
+    // Filter by user's programa (micrositio isolation)
+    const currentUser = await prisma.user.findUnique({
+      where: { id: session.id },
+      select: { programa: { select: { nombre: true } } },
+    });
+    if (currentUser?.programa?.nombre) {
+      where.programa = { equals: currentUser.programa.nombre, mode: 'insensitive' };
+    }
+
     if (search) {
       where.OR = [
         { nombres: { contains: search, mode: 'insensitive' } },
