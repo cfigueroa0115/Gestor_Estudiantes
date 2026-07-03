@@ -6,6 +6,7 @@ import { studentRequestSchema } from '@/lib/validations/student-request.schema';
 import { TipoSolicitud, Prisma } from '@prisma/client';
 import { sendEscalationEmail } from '@/lib/email';
 import { generateNumeroRadicado } from '@/lib/radicado';
+import { autoRegisterStudent } from '@/lib/student-auto-register';
 
 /**
  * Mapping from Zod schema tipo_solicitud values (with accents) to Prisma enum keys (without accents).
@@ -212,6 +213,7 @@ export async function POST(request: NextRequest) {
         numero_radicado: numeroRadicado,
         fecha_solicitud: new Date(data.fecha_solicitud),
         id_estudiante: data.id_estudiante,
+        nro_documento: data.nro_documento ?? null,
         nombres: data.nombres,
         apellidos: data.apellidos,
         correo: data.correo,
@@ -228,6 +230,18 @@ export async function POST(request: NextRequest) {
         estado_solicitud: 'Radicada',
         estado_solicitud_fecha: new Date(),
       },
+    });
+
+    // 6.1 Auto-register student if not in DB (insert only, never update/delete)
+    await autoRegisterStudent({
+      id_estudiante: data.id_estudiante,
+      nro_documento: data.nro_documento,
+      nombres: data.nombres,
+      apellidos: data.apellidos,
+      correo: data.correo,
+      celular: data.celular,
+      programa: data.programa,
+      modalidad: data.modalidad,
     });
 
     // 7. If escalation is required, update state and send email

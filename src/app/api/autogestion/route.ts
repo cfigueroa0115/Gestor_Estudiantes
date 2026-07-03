@@ -4,6 +4,7 @@ import { studentRequestSchema } from '@/lib/validations/student-request.schema';
 import { TipoSolicitud } from '@prisma/client';
 import { generateNumeroRadicado } from '@/lib/radicado';
 import { sendEscalationEmail } from '@/lib/email';
+import { autoRegisterStudent } from '@/lib/student-auto-register';
 
 const TIPO_SOLICITUD_MAP: Record<string, TipoSolicitud> = {
   'Académico': TipoSolicitud.Academico,
@@ -44,6 +45,7 @@ export async function POST(request: NextRequest) {
         numero_radicado: numeroRadicado,
         fecha_solicitud: new Date(data.fecha_solicitud),
         id_estudiante: data.id_estudiante,
+        nro_documento: data.nro_documento ?? null,
         nombres: data.nombres,
         apellidos: data.apellidos,
         correo: data.correo,
@@ -60,6 +62,18 @@ export async function POST(request: NextRequest) {
         estado_solicitud: 'Radicada',
         estado_solicitud_fecha: new Date(),
       },
+    });
+
+    // Auto-register student if not in DB (insert only, never update/delete)
+    await autoRegisterStudent({
+      id_estudiante: data.id_estudiante,
+      nro_documento: data.nro_documento,
+      nombres: data.nombres,
+      apellidos: data.apellidos,
+      correo: data.correo,
+      celular: data.celular,
+      programa: data.programa,
+      modalidad: data.modalidad,
     });
 
     // Escalation email if needed
