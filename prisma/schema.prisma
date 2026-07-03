@@ -71,6 +71,7 @@ model StudentRequest {
   numero_radicado        String         @unique @db.VarChar(20)
   fecha_solicitud        DateTime       @db.Date
   id_estudiante          String         @db.VarChar(10)
+  nro_documento          String?        @db.VarChar(20)
   nombres                String         @db.VarChar(100)
   apellidos              String         @db.VarChar(100)
   correo                 String         @db.VarChar(100)

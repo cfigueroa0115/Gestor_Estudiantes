@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
-import { lookupStudent } from '@/lib/use-student-lookup';
+import { lookupStudent, lookupStudentByDoc } from '@/lib/use-student-lookup';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   studentRequestSchema,
@@ -34,7 +34,7 @@ export default function AutogestionPage() {
   const { register, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<StudentRequestInput>({
     resolver: zodResolver(studentRequestSchema),
     defaultValues: {
-      fecha_solicitud: getTodayDate(), id_estudiante: '', nombres: '', apellidos: '',
+      fecha_solicitud: getTodayDate(), id_estudiante: '', nro_documento: '', nombres: '', apellidos: '',
       correo: '', celular: '', programa: 'Ingeniería industrial',
       modalidad: undefined, tipo_solicitud: undefined,
       solicitud_academica: null, solicitud_financiera: null,
@@ -51,6 +51,7 @@ export default function AutogestionPage() {
     const id = e.target.value;
     setValue('id_estudiante', id);
     if (!id || id.length < 3) {
+      setValue('nro_documento', '');
       setValue('nombres', '');
       setValue('apellidos', '');
       setValue('correo', '');
@@ -60,12 +61,44 @@ export default function AutogestionPage() {
     }
     const result = await lookupStudent(id);
     if (result) {
+      if (result.nro_documento) setValue('nro_documento', result.nro_documento);
       if (result.nombres) setValue('nombres', result.nombres);
       if (result.apellidos) setValue('apellidos', result.apellidos);
       if (result.correo) setValue('correo', result.correo);
       if (result.celular) setValue('celular', result.celular);
       setStudentFound(true);
     } else {
+      setValue('nro_documento', '');
+      setValue('nombres', '');
+      setValue('apellidos', '');
+      setValue('correo', '');
+      setValue('celular', '');
+      setStudentFound(false);
+    }
+  };
+
+  const handleNroDocumentoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const doc = e.target.value;
+    setValue('nro_documento', doc);
+    if (!doc || doc.length < 3) {
+      setValue('id_estudiante', '');
+      setValue('nombres', '');
+      setValue('apellidos', '');
+      setValue('correo', '');
+      setValue('celular', '');
+      setStudentFound(false);
+      return;
+    }
+    const result = await lookupStudentByDoc(doc);
+    if (result) {
+      if (result.id_estudiante) setValue('id_estudiante', result.id_estudiante);
+      if (result.nombres) setValue('nombres', result.nombres);
+      if (result.apellidos) setValue('apellidos', result.apellidos);
+      if (result.correo) setValue('correo', result.correo);
+      if (result.celular) setValue('celular', result.celular);
+      setStudentFound(true);
+    } else {
+      setValue('id_estudiante', '');
       setValue('nombres', '');
       setValue('apellidos', '');
       setValue('correo', '');
@@ -159,8 +192,13 @@ export default function AutogestionPage() {
                 </div>
                 <div>
                   <label htmlFor="id_estudiante" className="mb-1 block text-sm font-medium text-gris-700">ID Estudiante</label>
-                  <input id="id_estudiante" type="text" inputMode="numeric" maxLength={10} placeholder="Máximo 10 dígitos" className={inputClass(!!errors.id_estudiante)} {...register('id_estudiante')} disabled={isSubmitting} onChange={handleIdEstudianteChange} />
+                  <input id="id_estudiante" type="text" inputMode="numeric" maxLength={10} placeholder="Máximo 10 dígitos" className={inputClass(!!errors.id_estudiante, studentFound)} {...register('id_estudiante')} disabled={isSubmitting || studentFound} onChange={handleIdEstudianteChange} />
                   {errors.id_estudiante && <p className="mt-1 text-xs text-red-600">{errors.id_estudiante.message}</p>}
+                </div>
+                <div>
+                  <label htmlFor="nro_documento" className="mb-1 block text-sm font-medium text-gris-700">Nro. Documento</label>
+                  <input id="nro_documento" type="text" inputMode="numeric" maxLength={20} placeholder="Número de documento" className={inputClass(!!errors.nro_documento, studentFound)} {...register('nro_documento')} disabled={isSubmitting || studentFound} onChange={handleNroDocumentoChange} />
+                  {errors.nro_documento && <p className="mt-1 text-xs text-red-600">{errors.nro_documento.message}</p>}
                 </div>
                 <div>
                   <label htmlFor="nombres" className="mb-1 block text-sm font-medium text-gris-700">Nombres</label>

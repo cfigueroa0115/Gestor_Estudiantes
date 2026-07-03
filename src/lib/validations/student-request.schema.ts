@@ -48,6 +48,12 @@ export const studentRequestSchema = z
       .min(1, 'El ID del estudiante es requerido')
       .max(10, 'El ID del estudiante debe tener máximo 10 dígitos')
       .regex(/^\d+$/, 'El ID del estudiante debe contener solo números'),
+    nro_documento: z
+      .string()
+      .max(20, 'El Nro. Documento debe tener máximo 20 caracteres')
+      .regex(/^\d*$/, 'El Nro. Documento debe contener solo números')
+      .optional()
+      .nullable(),
     nombres: z
       .string()
       .min(1, 'Los nombres son requeridos')
