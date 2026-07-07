@@ -119,8 +119,8 @@ export async function POST(request: NextRequest) {
       id: user!.id,
       usuario: user!.usuario,
       cargo: user!.cargo,
-      programa_id: tokenProgramaId,
-      programa_codigo: tokenProgramaCodigo,
+      programa_id: tokenProgramaId || undefined,
+      programa_codigo: tokenProgramaCodigo || undefined,
     });
 
     // Create response and set session cookie

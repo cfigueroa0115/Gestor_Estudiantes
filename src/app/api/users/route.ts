@@ -28,7 +28,15 @@ export async function GET(request: NextRequest) {
       select: { programa_id: true },
     });
     // For transversal users, get programa_id from JWT session
-    const filterProgramaId = currentUser?.programa_id || session.programa_id;
+    let filterProgramaId = currentUser?.programa_id;
+    if (!filterProgramaId && (session.programa_id || session.programa_codigo)) {
+      if (session.programa_id) {
+        filterProgramaId = session.programa_id;
+      } else if (session.programa_codigo) {
+        const sp = await prisma.programa.findFirst({ where: { codigo: session.programa_codigo }, select: { id: true } });
+        filterProgramaId = sp?.id;
+      }
+    }
 
     const { searchParams } = new URL(request.url);
 

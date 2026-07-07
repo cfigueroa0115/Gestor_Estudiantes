@@ -32,9 +32,12 @@ export async function GET(request: NextRequest) {
     let programaNombre = user.programa?.nombre;
     let isAdmin = user.programa?.admin_ids?.includes(user.usuario) || false;
 
-    if (!user.programa_id && session.programa_id) {
-      const sessionProg = await prisma.programa.findUnique({
-        where: { id: session.programa_id },
+    if (!user.programa_id && (session.programa_id || session.programa_codigo)) {
+      const whereClause = session.programa_id
+        ? { id: session.programa_id }
+        : { codigo: session.programa_codigo! };
+      const sessionProg = await prisma.programa.findFirst({
+        where: whereClause,
         select: { id: true, codigo: true, nombre: true, admin_ids: true },
       });
       if (sessionProg) {
