@@ -178,8 +178,13 @@ export async function GET(request: NextRequest) {
       where: { id: session.id },
       select: { programa: { select: { nombre: true } } },
     });
-    if (currentUser?.programa?.nombre) {
-      where.programa = { equals: currentUser.programa.nombre, mode: 'insensitive' };
+    let exportProgramaNombre = currentUser?.programa?.nombre;
+    if (!exportProgramaNombre && session.programa_id) {
+      const sessionProg = await prisma.programa.findUnique({ where: { id: session.programa_id }, select: { nombre: true } });
+      exportProgramaNombre = sessionProg?.nombre;
+    }
+    if (exportProgramaNombre) {
+      where.programa = { equals: exportProgramaNombre, mode: 'insensitive' };
     }
 
     if (search) {

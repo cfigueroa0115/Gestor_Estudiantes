@@ -99,12 +99,28 @@ export async function POST(request: NextRequest) {
     });
 
     // Generate JWT token (include programa info)
+    // For transversal users (no programa_id), use the programa selected at login
+    let tokenProgramaId = user!.programa?.id;
+    let tokenProgramaCodigo = user!.programa?.codigo;
+
+    if (!tokenProgramaId && parsed.data.programa) {
+      // Transversal user - lookup the selected programa
+      const selectedProg = await prisma.programa.findUnique({
+        where: { codigo: parsed.data.programa },
+        select: { id: true, codigo: true },
+      });
+      if (selectedProg) {
+        tokenProgramaId = selectedProg.id;
+        tokenProgramaCodigo = selectedProg.codigo;
+      }
+    }
+
     const token = await signToken({
       id: user!.id,
       usuario: user!.usuario,
       cargo: user!.cargo,
-      programa_id: user!.programa?.id,
-      programa_codigo: user!.programa?.codigo,
+      programa_id: tokenProgramaId,
+      programa_codigo: tokenProgramaCodigo,
     });
 
     // Create response and set session cookie

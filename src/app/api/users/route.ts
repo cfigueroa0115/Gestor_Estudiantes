@@ -27,6 +27,8 @@ export async function GET(request: NextRequest) {
       where: { id: session.id },
       select: { programa_id: true },
     });
+    // For transversal users, get programa_id from JWT session
+    const filterProgramaId = currentUser?.programa_id || session.programa_id;
 
     const { searchParams } = new URL(request.url);
 
@@ -61,8 +63,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Filter by user's programa (micrositio isolation)
-    if (currentUser?.programa_id) {
-      where.programa_id = currentUser.programa_id;
+    if (filterProgramaId) {
+      where.programa_id = filterProgramaId;
     }
 
     // Get total count for pagination
