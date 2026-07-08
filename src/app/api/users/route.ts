@@ -186,12 +186,30 @@ export async function POST(request: NextRequest) {
     const password_hash = await hashPassword(password);
 
     // 5. Create user record with created_by = authenticated user's id
+    // Assign the same programa as the creator (micrositio isolation)
+    const creator = await prisma.user.findUnique({
+      where: { id: session.id },
+      select: { programa_id: true },
+    });
+    // For transversal admins, get programa from JWT session
+    let newUserProgramaId = creator?.programa_id;
+    if (!newUserProgramaId && (session.programa_id || session.programa_codigo)) {
+      if (session.programa_id) {
+        newUserProgramaId = session.programa_id;
+      } else if (session.programa_codigo) {
+        const sp = await prisma.programa.findFirst({ where: { codigo: session.programa_codigo }, select: { id: true } });
+        newUserProgramaId = sp?.id || null;
+      }
+    }
+
     const newUser = await prisma.user.create({
       data: {
         usuario,
         password_hash,
         cargo,
         estado,
+        programa_id: newUserProgramaId,
+        organizacion: session.programa_codigo || null,
         created_by: session.id,
       },
     });
