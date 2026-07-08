@@ -22,8 +22,13 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Profesores cannot access user administration
-    if (session.cargo === 'Profesor') {
+    // Profesores cannot access user administration (unless they are program admins)
+    const userForRoleCheck = await prisma.user.findUnique({
+      where: { id: session.id },
+      select: { usuario: true, programa: { select: { admin_ids: true } } },
+    });
+    const isProfesorAdmin = userForRoleCheck?.programa?.admin_ids?.includes(userForRoleCheck.usuario) || false;
+    if (session.cargo === 'Profesor' && !isProfesorAdmin) {
       return NextResponse.json(
         { error: 'Permisos insuficientes' },
         { status: 403 }

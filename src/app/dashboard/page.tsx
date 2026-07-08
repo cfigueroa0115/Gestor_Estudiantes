@@ -25,8 +25,8 @@ export default function DashboardPage() {
     checkUser();
   }, []);
 
-  // Profesores can NOT see Admin or Dashboard buttons
-  const canAdminister = cargo !== 'Profesor';
+  // Profesores can NOT see Admin or Dashboard buttons (unless they are program admins)
+  const canAdminister = cargo !== 'Profesor' || isAdmin;
 
   const handleVirtualRoomClick = () => {
     router.push('/dashboard/requests');
