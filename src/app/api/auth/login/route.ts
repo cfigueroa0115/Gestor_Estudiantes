@@ -88,7 +88,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Authentication successful - reset failed_attempts and update last_login_at
+    // Authentication successful - check programa restriction for dual-program users
+    // Users with organizacion like "01TIC,01TAC" can ONLY access those programs
+    if (user!.organizacion && user!.organizacion.includes(',') && parsed.data.programa) {
+      const allowedPrograms = user!.organizacion.split(',').map(p => p.trim());
+      if (!allowedPrograms.includes(parsed.data.programa)) {
+        return NextResponse.json(
+          { success: false, error: 'No tiene acceso a este programa' },
+          { status: 401 }
+        );
+      }
+    }
+
+    // For users with a fixed programa (not null, not dual), they can only access their own programa
+    if (user!.programa && parsed.data.programa && user!.programa.codigo !== parsed.data.programa) {
+      // User has fixed program but selected a different one
+      return NextResponse.json(
+        { success: false, error: 'No tiene acceso a este programa' },
+        { status: 401 }
+      );
+    }
+
+    // Reset failed_attempts and update last_login_at
     await prisma.user.update({
       where: { id: user!.id },
       data: {

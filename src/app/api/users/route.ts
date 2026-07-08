@@ -84,8 +84,13 @@ export async function GET(request: NextRequest) {
     }
 
     // Filter by user's programa (micrositio isolation)
+    // Include users with exact programa_id OR dual-program users (organizacion contains the code)
     if (filterProgramaId) {
-      where.programa_id = filterProgramaId;
+      const currentProgCode = session.programa_codigo;
+      where.OR = [
+        { programa_id: filterProgramaId },
+        ...(currentProgCode ? [{ organizacion: { contains: currentProgCode } }] : []),
+      ];
     }
 
     // Get total count for pagination
