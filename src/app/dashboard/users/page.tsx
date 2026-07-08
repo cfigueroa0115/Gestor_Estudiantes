@@ -27,6 +27,15 @@ export default function UsersPage() {
   const { showToast } = useToast();
   const router = useRouter();
 
+  // Role check - redirect Profesores away
+  useEffect(() => {
+    fetch('/api/auth/me').then(r => r.ok ? r.json() : null).then(data => {
+      if (data && data.cargo === 'Profesor') {
+        router.replace('/dashboard');
+      }
+    }).catch(() => {});
+  }, [router]);
+
   // Data state
   const [users, setUsers] = useState<UserRecord[]>([]);
   const [loading, setLoading] = useState(true);

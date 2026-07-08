@@ -55,6 +55,15 @@ export default function AnalyticsPage() {
   const [popupType, setPopupType] = useState<'aTiempo' | 'enRiesgo' | 'vencida' | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Role check - redirect Profesores away
+  useEffect(() => {
+    fetch('/api/auth/me').then(r => r.ok ? r.json() : null).then(data => {
+      if (data && data.cargo === 'Profesor') {
+        router.replace('/dashboard');
+      }
+    }).catch(() => {});
+  }, [router]);
+
   const fetchStats = useCallback(async () => {
     setLoading(true);
     try {

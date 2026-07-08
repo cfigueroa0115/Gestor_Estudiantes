@@ -16,6 +16,11 @@ export async function GET() {
       return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
     }
 
+    // Profesores cannot access analytics dashboard
+    if (session.cargo === 'Profesor') {
+      return NextResponse.json({ error: 'Permisos insuficientes' }, { status: 403 });
+    }
+
     // Get user's programa for filtering
     const currentUser = await prisma.user.findUnique({
       where: { id: session.id },

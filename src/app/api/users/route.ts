@@ -22,6 +22,14 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Profesores cannot access user administration
+    if (session.cargo === 'Profesor') {
+      return NextResponse.json(
+        { error: 'Permisos insuficientes' },
+        { status: 403 }
+      );
+    }
+
     // Get current user's programa_id for filtering
     const currentUser = await prisma.user.findUnique({
       where: { id: session.id },
