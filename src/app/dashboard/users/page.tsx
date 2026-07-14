@@ -27,10 +27,10 @@ export default function UsersPage() {
   const { showToast } = useToast();
   const router = useRouter();
 
-  // Role check - redirect Profesores away
+  // Role check - redirect Profesores who are NOT admins
   useEffect(() => {
     fetch('/api/auth/me').then(r => r.ok ? r.json() : null).then(data => {
-      if (data && data.cargo === 'Profesor') {
+      if (data && data.cargo === 'Profesor' && !data.is_admin) {
         router.replace('/dashboard');
       }
     }).catch(() => {});
