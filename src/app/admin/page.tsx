@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -18,9 +17,11 @@ interface ProgramaStats {
 }
 
 export default function AdminPage() {
-  const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  const [loginLoading, setLoginLoading] = useState(false);
   const [stats, setStats] = useState<ProgramaStats[]>([]);
   const [exporting, setExporting] = useState(false);
 
@@ -32,11 +33,57 @@ export default function AdminPage() {
           setAuthenticated(true);
           fetchAllStats();
         } else {
-          router.replace('/');
+          setShowLogin(true);
+          setLoading(false);
         }
       })
-      .catch(() => router.replace('/'));
-  }, [router]);
+      .catch(() => { setShowLogin(true); setLoading(false); });
+  }, []);
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoginLoading(true);
+    setLoginError('');
+    const formData = new FormData(e.currentTarget);
+    const usuario = formData.get('usuario') as string;
+    const contrasena = formData.get('contrasena') as string;
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuario, contrasena, cargo: 'Administrativo' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        // Verify is admin
+        const meRes = await fetch('/api/auth/me');
+        const meData = await meRes.json();
+        if (ADMIN_USERS.includes(meData.usuario)) {
+          setAuthenticated(true);
+          setShowLogin(false);
+          fetchAllStats();
+        } else {
+          // Try other cargo
+          await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ usuario, contrasena, cargo: 'Profesor' }) });
+          const meRes2 = await fetch('/api/auth/me');
+          const meData2 = await meRes2.json();
+          if (ADMIN_USERS.includes(meData2.usuario)) {
+            setAuthenticated(true);
+            setShowLogin(false);
+            fetchAllStats();
+          } else {
+            setLoginError('No tiene permisos de administración');
+          }
+        }
+      } else {
+        setLoginError(data.error || 'Credenciales inválidas');
+      }
+    } catch {
+      setLoginError('Error de conexión');
+    }
+    setLoginLoading(false);
+  };
 
   const fetchAllStats = async () => {
     try {
@@ -56,6 +103,34 @@ export default function AdminPage() {
   };
 
   if (!authenticated || loading) {
+    if (showLogin) {
+      return (
+        <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-aguamarina-50 via-white to-verde-50">
+          <div className="mx-4 w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl">
+            <div className="mb-6 text-center">
+              <Image src="/logo-ucc.jpeg" alt="UCC" width={120} height={48} className="mx-auto mb-4 h-12 w-auto" />
+              <h2 className="text-xl font-bold text-gris-900">Administración General</h2>
+              <p className="mt-1 text-sm text-gris-500">Ingrese sus credenciales de administrador</p>
+            </div>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gris-700">Usuario</label>
+                <input name="usuario" type="text" inputMode="numeric" required className="w-full rounded-lg border border-gris-300 px-3 py-2 text-sm focus:border-aguamarina-500 focus:ring-1 focus:ring-aguamarina-500" placeholder="ID numérico" />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gris-700">Contraseña</label>
+                <input name="contrasena" type="password" required className="w-full rounded-lg border border-gris-300 px-3 py-2 text-sm focus:border-aguamarina-500 focus:ring-1 focus:ring-aguamarina-500" placeholder="Contraseña" />
+              </div>
+              {loginError && <p className="rounded-lg bg-red-50 p-3 text-center text-sm text-red-700">{loginError}</p>}
+              <button type="submit" disabled={loginLoading} className="w-full rounded-lg bg-aguamarina-600 py-2.5 text-sm font-semibold text-white hover:bg-aguamarina-700 disabled:opacity-50">
+                {loginLoading ? 'Verificando...' : 'Ingresar'}
+              </button>
+              <Link href="/" className="block text-center text-sm text-gris-500 hover:text-aguamarina-600">Volver al portal</Link>
+            </form>
+          </div>
+        </main>
+      );
+    }
     return (
       <div className="flex min-h-screen items-center justify-center bg-gris-50">
         <div className="animate-pulse text-gris-500">Cargando...</div>
