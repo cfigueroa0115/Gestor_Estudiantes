@@ -69,7 +69,7 @@ export function HeroSection({ onLoginClick, onAdminClick }: HeroSectionProps) {
             <Button
               onClick={onAdminClick}
               size="lg"
-              className="w-48 rounded-full bg-gradient-to-r from-aguamarina-500 to-verde-600 px-8 py-3 text-base font-semibold text-white shadow-lg transition-all hover:from-aguamarina-600 hover:to-verde-700 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-aguamarina-500 focus-visible:ring-offset-2 md:w-56 md:px-10 md:py-4 md:text-lg"
+              className="w-48 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-3 text-base font-semibold text-white shadow-lg transition-all hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 md:w-56 md:px-10 md:py-4 md:text-lg"
             >
               Administración
             </Button>

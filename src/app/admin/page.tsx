@@ -22,6 +22,7 @@ export default function AdminPage() {
   const [showLogin, setShowLogin] = useState(false);
   const [loginError, setLoginError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [stats, setStats] = useState<ProgramaStats[]>([]);
   const [exporting, setExporting] = useState(false);
 
@@ -49,14 +50,24 @@ export default function AdminPage() {
     const contrasena = formData.get('contrasena') as string;
 
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ usuario, contrasena, cargo: 'Administrativo' }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        // Verify is admin
+      // Try all cargos since admin users can have different roles
+      const cargos = ['Profesor', 'Jefe', 'Administrativo'];
+      let loginSuccess = false;
+
+      for (const cargo of cargos) {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ usuario, contrasena, cargo }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          loginSuccess = true;
+          break;
+        }
+      }
+
+      if (loginSuccess) {
         const meRes = await fetch('/api/auth/me');
         const meData = await meRes.json();
         if (ADMIN_USERS.includes(meData.usuario)) {
@@ -64,20 +75,10 @@ export default function AdminPage() {
           setShowLogin(false);
           fetchAllStats();
         } else {
-          // Try other cargo
-          await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ usuario, contrasena, cargo: 'Profesor' }) });
-          const meRes2 = await fetch('/api/auth/me');
-          const meData2 = await meRes2.json();
-          if (ADMIN_USERS.includes(meData2.usuario)) {
-            setAuthenticated(true);
-            setShowLogin(false);
-            fetchAllStats();
-          } else {
-            setLoginError('No tiene permisos de administración');
-          }
+          setLoginError('No tiene permisos de administración');
         }
       } else {
-        setLoginError(data.error || 'Credenciales inválidas');
+        setLoginError('Credenciales inválidas');
       }
     } catch {
       setLoginError('Error de conexión');
@@ -119,7 +120,16 @@ export default function AdminPage() {
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-gris-700">Contraseña</label>
-                <input name="contrasena" type="password" required className="w-full rounded-lg border border-gris-300 px-3 py-2 text-sm focus:border-aguamarina-500 focus:ring-1 focus:ring-aguamarina-500" placeholder="Contraseña" />
+                <div className="relative">
+                  <input name="contrasena" type={showPassword ? "text" : "password"} required className="w-full rounded-lg border border-gris-300 px-3 py-2 pr-10 text-sm focus:border-aguamarina-500 focus:ring-1 focus:ring-aguamarina-500" placeholder="Contraseña" />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gris-500 hover:text-gris-700" tabIndex={-1}>
+                    {showPassword ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    )}
+                  </button>
+                </div>
               </div>
               {loginError && <p className="rounded-lg bg-red-50 p-3 text-center text-sm text-red-700">{loginError}</p>}
               <button type="submit" disabled={loginLoading} className="w-full rounded-lg bg-aguamarina-600 py-2.5 text-sm font-semibold text-white hover:bg-aguamarina-700 disabled:opacity-50">
