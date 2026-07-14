@@ -1,0 +1,146 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
+
+const ADMIN_USERS = ['1129564302', '52317897', '455651', '330032'];
+
+interface ProgramaStats {
+  codigo: string;
+  nombre: string;
+  total: number;
+  radicadas: number;
+  escaladas: number;
+  enProgreso: number;
+  cerradas: number;
+}
+
+export default function AdminPage() {
+  const router = useRouter();
+  const [authenticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<ProgramaStats[]>([]);
+  const [exporting, setExporting] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (data && ADMIN_USERS.includes(data.usuario)) {
+          setAuthenticated(true);
+          fetchAllStats();
+        } else {
+          router.replace('/');
+        }
+      })
+      .catch(() => router.replace('/'));
+  }, [router]);
+
+  const fetchAllStats = async () => {
+    try {
+      const res = await fetch('/api/admin/stats-all');
+      if (res.ok) {
+        const data = await res.json();
+        setStats(data);
+      }
+    } catch { /* ignore */ }
+    setLoading(false);
+  };
+
+  const handleExport = async () => {
+    setExporting(true);
+    window.location.href = '/api/admin/export-all';
+    setTimeout(() => setExporting(false), 3000);
+  };
+
+  if (!authenticated || loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gris-50">
+        <div className="animate-pulse text-gris-500">Cargando...</div>
+      </div>
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-gris-50">
+      {/* Header */}
+      <header className="border-b border-gris-200 bg-white px-4 py-4 shadow-sm md:px-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link href="/">
+              <Image src="/logo-ucc.jpeg" alt="UCC" width={120} height={48} className="h-10 w-auto" />
+            </Link>
+            <div>
+              <h1 className="text-lg font-bold text-gris-900">Administración General</h1>
+              <p className="text-xs text-gris-500">Dashboard consolidado de todos los programas</p>
+            </div>
+          </div>
+          <Link href="/" className="rounded-lg border border-gris-300 px-4 py-2 text-sm font-medium text-gris-700 hover:bg-gris-50">
+            Volver al portal
+          </Link>
+        </div>
+      </header>
+
+      {/* Content */}
+      <div className="mx-auto max-w-7xl px-4 py-8 md:px-8">
+        {/* Export button */}
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-bold text-gris-900">Dashboards por Programa</h2>
+            <p className="mt-1 text-sm text-gris-500">Seleccione un programa para ver sus estadísticas detalladas</p>
+          </div>
+          <button
+            onClick={handleExport}
+            disabled={exporting}
+            className="inline-flex items-center gap-2 rounded-lg bg-verde-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-verde-700 disabled:opacity-50"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            {exporting ? 'Generando...' : 'Exportar Reporte Consolidado'}
+          </button>
+        </div>
+
+        {/* Program cards grid */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {stats.map((prog) => (
+            <div key={prog.codigo} className="overflow-hidden rounded-xl border border-gris-200 bg-white shadow-sm transition-all hover:shadow-md">
+              <div className="bg-gradient-to-r from-aguamarina-500 to-verde-600 px-5 py-3">
+                <h3 className="text-sm font-bold text-white">{prog.nombre}</h3>
+                <p className="text-xs text-white/80">{prog.codigo}</p>
+              </div>
+              <div className="p-5">
+                <div className="mb-4 grid grid-cols-2 gap-3">
+                  <div className="rounded-lg bg-gris-50 p-3 text-center">
+                    <p className="text-2xl font-bold text-gris-900">{prog.total}</p>
+                    <p className="text-[10px] font-medium uppercase text-gris-500">Total</p>
+                  </div>
+                  <div className="rounded-lg bg-blue-50 p-3 text-center">
+                    <p className="text-2xl font-bold text-blue-700">{prog.radicadas}</p>
+                    <p className="text-[10px] font-medium uppercase text-blue-500">Radicadas</p>
+                  </div>
+                  <div className="rounded-lg bg-orange-50 p-3 text-center">
+                    <p className="text-2xl font-bold text-orange-700">{prog.escaladas}</p>
+                    <p className="text-[10px] font-medium uppercase text-orange-500">Escaladas</p>
+                  </div>
+                  <div className="rounded-lg bg-green-50 p-3 text-center">
+                    <p className="text-2xl font-bold text-green-700">{prog.enProgreso + prog.cerradas}</p>
+                    <p className="text-[10px] font-medium uppercase text-green-500">Gestionadas</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {stats.length === 0 && !loading && (
+          <div className="rounded-xl border border-gris-200 bg-white p-12 text-center">
+            <p className="text-gris-500">No hay datos disponibles aún</p>
+          </div>
+        )}
+      </div>
+    </main>
+  );
+}

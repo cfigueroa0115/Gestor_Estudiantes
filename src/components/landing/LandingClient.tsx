@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { HeroSection } from "./HeroSection";
 import { GlassmorphismCards } from "./GlassmorphismCards";
 import { QRAutoGestionButton } from "./QRButton";
 import { LoginModal } from "@/components/auth/LoginModal";
 
 export function LandingClient() {
+  const router = useRouter();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [modalError, setModalError] = useState<string | null>(null);
 
@@ -19,13 +21,17 @@ export function LandingClient() {
     }
   };
 
+  const handleAdminClick = () => {
+    router.push("/admin");
+  };
+
   const handleCloseModal = () => {
     setIsLoginModalOpen(false);
   };
 
   return (
     <>
-      <HeroSection onLoginClick={handleLoginClick} />
+      <HeroSection onLoginClick={handleLoginClick} onAdminClick={handleAdminClick} />
       <GlassmorphismCards />
 
       {/* Floating QR Button */}

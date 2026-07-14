@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 
 interface HeroSectionProps {
   onLoginClick: () => void;
+  onAdminClick?: () => void;
 }
 
-export function HeroSection({ onLoginClick }: HeroSectionProps) {
+export function HeroSection({ onLoginClick, onAdminClick }: HeroSectionProps) {
   const shouldReduceMotion = useReducedMotion();
 
   const animationProps = (delay: number) =>
@@ -56,7 +57,7 @@ export function HeroSection({ onLoginClick }: HeroSectionProps) {
           datos de forma eficiente y segura.
         </motion.p>
 
-        <motion.div {...animationProps(0.4)} className="mt-8 md:mt-10">
+        <motion.div {...animationProps(0.4)} className="mt-8 flex flex-wrap items-center justify-center gap-4 md:mt-10">
           <Button
             onClick={onLoginClick}
             size="lg"
@@ -64,6 +65,15 @@ export function HeroSection({ onLoginClick }: HeroSectionProps) {
           >
             Ingresa aquí
           </Button>
+          {onAdminClick && (
+            <Button
+              onClick={onAdminClick}
+              size="lg"
+              className="rounded-full border-2 border-gris-300 bg-white px-8 py-3 text-base font-semibold text-gris-700 shadow-md transition-all hover:border-aguamarina-500 hover:bg-aguamarina-50 hover:text-aguamarina-700 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-aguamarina-500 focus-visible:ring-offset-2 md:px-10 md:py-4 md:text-lg"
+            >
+              Administración
+            </Button>
+          )}
         </motion.div>
       </div>
     </section>

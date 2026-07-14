@@ -4,8 +4,8 @@ import type { Cargo } from '@/types';
 
 // --- Route Configuration ---
 
-const PRIVATE_ROUTES = ['/dashboard', '/dashboard/users', '/dashboard/requests'];
-const PRIVATE_API_ROUTES = ['/api/users', '/api/student-requests'];
+const PRIVATE_ROUTES = ['/dashboard', '/dashboard/users', '/dashboard/requests', '/admin'];
+const PRIVATE_API_ROUTES = ['/api/users', '/api/student-requests', '/api/admin'];
 const PUBLIC_ROUTES = ['/', '/api/auth/login', '/autogestion', '/api/autogestion', '/api/estudiantes', '/api/programas'];
 
 // --- Role-Based Access Configuration (preparation for future restrictions) ---
@@ -151,5 +151,5 @@ function handleUnauthenticated(
 // --- Middleware Config ---
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/api/users/:path*', '/api/student-requests/:path*'],
+  matcher: ['/dashboard/:path*', '/admin/:path*', '/api/users/:path*', '/api/student-requests/:path*', '/api/admin/:path*'],
 };
