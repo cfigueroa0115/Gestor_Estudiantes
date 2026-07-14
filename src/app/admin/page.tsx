@@ -25,6 +25,7 @@ export default function AdminPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [stats, setStats] = useState<ProgramaStats[]>([]);
   const [exporting, setExporting] = useState(false);
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -32,6 +33,7 @@ export default function AdminPage() {
       .then(data => {
         if (data && ADMIN_USERS.includes(data.usuario)) {
           setAuthenticated(true);
+          setUserName(data.nombre || data.usuario);
           fetchAllStats();
         } else {
           setShowLogin(true);
@@ -73,6 +75,7 @@ export default function AdminPage() {
         if (ADMIN_USERS.includes(meData.usuario)) {
           setAuthenticated(true);
           setShowLogin(false);
+          setUserName(meData.nombre || meData.usuario);
           fetchAllStats();
         } else {
           setLoginError('No tiene permisos de administración');
@@ -101,6 +104,14 @@ export default function AdminPage() {
     setExporting(true);
     window.location.href = '/api/admin/export-all';
     setTimeout(() => setExporting(false), 3000);
+  };
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    setAuthenticated(false);
+    setShowLogin(true);
+    setStats([]);
+    setUserName('');
   };
 
   if (!authenticated || loading) {
@@ -162,9 +173,26 @@ export default function AdminPage() {
               <p className="text-xs text-gris-500">Dashboard consolidado de todos los programas</p>
             </div>
           </div>
-          <Link href="/" className="rounded-lg border border-gris-300 px-4 py-2 text-sm font-medium text-gris-700 hover:bg-gris-50">
-            Volver al portal
-          </Link>
+          <div className="flex items-center gap-4">
+            {/* User info with online indicator */}
+            <div className="hidden items-center gap-2 sm:flex">
+              <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-blue-100">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-green-500"></span>
+              </div>
+              <div>
+                <p className="text-xs font-medium text-gris-900">{userName}</p>
+                <p className="text-[10px] text-green-600">● En línea</p>
+              </div>
+            </div>
+            {/* Logout button */}
+            <button
+              onClick={handleLogout}
+              className="rounded-lg border border-gris-300 px-4 py-2 text-sm font-medium text-gris-700 transition-colors hover:bg-red-50 hover:border-red-300 hover:text-red-600"
+            >
+              Cerrar sesión
+            </button>
+          </div>
         </div>
       </header>
 
